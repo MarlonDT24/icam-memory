@@ -29,7 +29,7 @@ class LowVoltageController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        
     }
 
     /**
