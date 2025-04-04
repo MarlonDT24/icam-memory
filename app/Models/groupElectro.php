@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-class groupElectro extends Model
+class GroupElectro extends Model
 {
     use HasFactory;
 
