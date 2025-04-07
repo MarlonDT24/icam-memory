@@ -88,7 +88,6 @@ class GroupElectroController extends Controller
         $groupElectro->location = $request->input('location');
         $groupElectro->cod_location = $request->input('cod_location');
         $groupElectro->name_location = $request->input('name_location');
-          
     
         // En caso de que se suba la imagen
         if ($request->hasFile('cover')) {
