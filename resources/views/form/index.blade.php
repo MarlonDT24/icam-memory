@@ -21,11 +21,14 @@
         <!-- Section: Opciones de memoria-->
         <section class="py-5">
             <div class="row text-center mb-5">
-                <div class="col-md-6">
-                    <a href="{{ route('compatibility.create') }}" class="btn btn-danger btn-lg w-100">Crear Memoria de Compatibilidad</a>
+                <div class="col-md-4">
+                    <a href="{{ route('form.create') }}" class="btn btn-danger btn-lg w-100">Tipo: Compatibilidad</a>
                 </div>
-                <div class="col-md-6 mt-3 mt-md-0">
-                    <a href="{{ route('lowVoltage.create') }}" class="btn btn-warning btn-lg w-100">Crear Memoria de Baja Tensión</a>
+                <div class="col-md-4">
+                    <a href="{{ route('lowVoltage.create') }}" class="btn btn-danger btn-lg w-100">Tipo: Baja Tensión</a>
+                </div>
+                <div class="col-md-4">
+                    <a href="{{ route('groupElectro.create') }}" class="btn btn-danger btn-lg w-100">Tipo: Grupo Electrogeno</a>
                 </div>
             </div>
         </section>
@@ -40,7 +43,7 @@
 
                 <h2 class="text-center mb-4">Historial de Memorias de Compatibilidad</h2>
                 <!-- Cards container -->
-                <div class="row gx-4 gx-lg-5 row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
+                <div class="row gx-4 gx-lg-5 row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-xl-5 justify-content-center">
                     @foreach ($forms as $form)
                         <div class="col mb-5">
                             <div class="card card-hover">
@@ -62,7 +65,7 @@
                                 <!-- Acciones -->
                                 <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
                                     <div class="d-flex flex-column align-items-center gap-2">
-                                        <a class="btn btn-primary" href="{{ route('form.compatibility.show', $form->id) }}">Ver Más
+                                        <a class="btn btn-primary" href="{{ route('form.show', $form->id) }}">Ver Más
                                             Detalles</a>
                                         <a class="btn btn-warning" href="{{ route('form.edit', $form->id) }}">Editar</a>
                                         <form action="{{ route('form.destroy', $form->id) }}" method="post">
@@ -88,7 +91,7 @@
 
                 <h2 class="text-center mb-4">Historial de Memorias de Baja Tensión</h2>
                 <!-- Cards container -->
-                <div class="row gx-4 gx-lg-5 row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
+                <div class="row gx-4 gx-lg-5 row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-xl-5 justify-content-center">
                     @foreach ($forms as $form)
                         <div class="col mb-5">
                             <div class="card card-hover">
@@ -110,7 +113,7 @@
                                 <!-- Acciones -->
                                 <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
                                     <div class="d-flex flex-column align-items-center gap-2">
-                                        <a class="btn btn-primary" href="{{ route('form.compatibility.show', $form->id) }}">Ver Más
+                                        <a class="btn btn-primary" href="{{ route('form.show', $form->id) }}">Ver Más
                                             Detalles</a>
                                         <a class="btn btn-warning" href="{{ route('form.edit', $form->id) }}">Editar</a>
                                         <form action="{{ route('form.destroy', $form->id) }}" method="post">

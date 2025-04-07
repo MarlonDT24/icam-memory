@@ -14,7 +14,7 @@ class GroupElectro extends Model
         'cover',
         'holder',
         'address',
-        'cod_adress',
+        'cod_address',
         'cif',
         'name_agent',
         'nif',
@@ -29,10 +29,13 @@ class GroupElectro extends Model
         'type_clasi',
         'mark',
         'model',
+        'voltage',
         'image_model',
         'image_dimensions',
         'air_entry',
         'air_flow',
+        'w',
+        'factor',
     ];
 
     protected $casts = [

@@ -22,7 +22,7 @@
                 </div> 
                 @endif
 
-                <form action="{{ route('form.store') }}" method="POST" enctype="multipart/form-data">
+                <form action="{{ route('groupElectro.store') }}" method="POST" enctype="multipart/form-data">
                     @csrf
 
                     <div class="mb-3">
@@ -34,9 +34,10 @@
                     <div class="mb-3">
                         <label class="form-label" for="budget_excel">Subir Excel:</label>
                         <input class="form-control" type="file" id="budget_excel" name="budget_excel" accept=".xlsx, .xls">
+                        @error('budget_excel') <br>[ERROR]:{{ $message }} @enderror
                     </div>
 
-                    <h5 class="mt-4">Características</h5>
+                    <h5 class="mt-5 mb-3">Características</h5>
                     <div class="row mb-3">
                         <div class="col-md-8">
                             <label class="form-label" for="holder">Nombre del Titular:</label>
@@ -127,6 +128,87 @@
                         @error('tension_type') <br>[ERROR]:{{ $message }} @enderror
                     </div>
 
+                    <div class="mb-3">
+                        <label class="form-label" for="type_clasi">Tipo de clasificación:</label>
+                        <select class="form-select" id="type_clasi" name="type_clasi" data-bs-toggle="tooltip" title="Seleccione el tipo de clasificación">
+                            <option value="">-- Seleccione --</option>
+                            <option value="mojado" {{ old('type_clasi') == 'mojado' ? 'selected' : '' }}>Tipo Mojado</option>
+                            <option value="F+N" {{ old('type_clasi') == 'F+N' ? 'selected' : '' }}>F+N (Monofásica)</option>
+                        </select>
+                        @error('type_clasi') <br>[ERROR]:{{ $message }} @enderror
+                    </div>
+
+                    
+                    <div class="mb-3">
+                        <label class="form-label" for="mark">Marca:</label>
+                        <input class="form-control" type="text" id="mark" name="mark" value="{{ old('mark') }}" data-bs-toggle="tooltip" title="Introduzca la marca">
+                        @error('mark') <br>[ERROR]:{{ $message }} @enderror
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label" for="model">Modelo:</label>
+                        <input class="form-control" type="text" id="model" name="model" value="{{ old('model') }}" data-bs-toggle="tooltip" title="Introduzca la marca">
+                        @error('model') <br>[ERROR]:{{ $message }} @enderror
+                    </div>
+
+
+                    <div class="row mb-3">
+                        <div class="col-md-8">
+                            <label class="form-label" for="model">Modelo:</label>
+                            <input class="form-control" type="text" id="model" name="model" value="{{ old('model') }}" data-bs-toggle="tooltip" title="Introduzca el nombre del modelo">
+                            @error('model') <br>[ERROR]:{{ $message }} @enderror
+                        </div>
+
+                        <div class="col-md-4">
+                            <label class="form-label" for="image_model">Imagen del modelo:</label>
+                            <input class="form-control" type="file" id="image_model" name="image_model" accept="image/*" data-bs-toggle="tooltip" title="Puede añadir una imagen del modelo">
+                            @error('image_model') <br>[ERROR]:{{ $message }} @enderror
+                        </div>
+
+                        <div class="col-md-4">
+                            <label class="form-label" for="image_dimensions">Imagen de las dimensiones:</label>
+                            <input class="form-control" type="file" id="image_dimensions" name="image_dimensions" accept="image/*" data-bs-toggle="tooltip" title="Puede añadir una imagen de las dimensiones">
+                            @error('image_dimensions') <br>[ERROR]:{{ $message }} @enderror
+                        </div>
+                    </div>
+
+                    
+                    <div class="mb-3">
+                        <label class="form-label" for="voltage">Tensión de servicio:</label>
+                        <select class="form-select" id="voltage" name="voltage" data-bs-toggle="tooltip" title="Seleccione el tipo de tensión de servicio">
+                            <option value="">-- Seleccione --</option>
+                            <option value="3F+N" {{ old('voltage') == '3F+N' ? 'selected' : '' }}>3F+N (Trifásica)</option>
+                            <option value="F+N" {{ old('voltage') == 'F+N' ? 'selected' : '' }}>F+N (Monofásica)</option>
+                        </select>
+                        @error('voltage') <br>[ERROR]:{{ $message }} @enderror
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label" for="air_entry">Entrada de aire en m3/h:</label>
+                        <input class="form-control" type="text" id="air_entry" name="air_entry" value="{{ old('air_entry') }}" data-bs-toggle="tooltip" title="Introduzca la entrada de aire en m3/h">
+                        @error('air_entry') <br>[ERROR]:{{ $message }} @enderror
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label" for="air_flow">Entrada de flujo en m3/minuto:</label>
+                        <input class="form-control" type="text" id="air_flow" name="air_flow" value="{{ old('air_flow') }}" data-bs-toggle="tooltip" title="Introduzca la entrada de aire en m3/minuto">
+                        @error('air_flow') <br>[ERROR]:{{ $message }} @enderror
+                    </div>
+                    
+                    <div class="row mb-3">
+                        <div class="col-md-8">
+                            <label class="form-label" for="w">Potencia en W:</label>
+                            <input class="form-control" type="text" id="w" name="w" value="{{ old('w') }}" data-bs-toggle="tooltip" title="Introduzca la potencia en W">
+                            @error('w') <br>[ERROR]:{{ $message }} @enderror
+                        </div>
+
+                        <div class="col-md-8">
+                            <label class="form-label" for="factor">Factor de potencia del grupo:</label>
+                            <input class="form-control" type="text" id="factor" name="factor" value="{{ old('factor') }}" data-bs-toggle="tooltip" title="Introduzca el factor de potencia">
+                            @error('factor') <br>[ERROR]:{{ $message }} @enderror
+                        </div>
+                    </div>
+                    
                     <div class="mb-3">
                         <label class="form-label" for="description">Descripción de la Actividad:</label>
                         <textarea class="form-control" id="description" name="description" rows="4" data-bs-toggle="tooltip" title="Introduzca una descripción que se va a realizar">{{ old('description') }}</textarea>

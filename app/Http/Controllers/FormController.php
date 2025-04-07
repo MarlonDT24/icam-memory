@@ -25,7 +25,7 @@ class FormController extends Controller
      */
     public function create()
     {
-        return view('form.create');
+        return view('form.compatibility.create');
     }
 
     /**
@@ -65,7 +65,7 @@ class FormController extends Controller
      */
     public function show(Form $form)
     {
-        return view('form.show', compact('form'));
+        return view('form.compatibility.show', compact('form'));
     }
 
     /**
@@ -73,7 +73,7 @@ class FormController extends Controller
      */
     public function edit(Form $form)
     {
-        return view('form.edit', compact('form'));
+        return view('form.compatibility.edit', compact('form'));
     }
 
     /**

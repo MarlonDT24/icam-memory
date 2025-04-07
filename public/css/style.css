@@ -45,7 +45,7 @@
     border: 1px solid #333;
 }
 
-[data-bs-theme="dark"] .navbar, [data-bs-theme="dark"] .card-header,
+[data-bs-theme="dark"] .navbar,
 [data-bs-theme="dark"] .card-footer {
     background-color: #1a1a1a !important;
     border-color: #333 !important;

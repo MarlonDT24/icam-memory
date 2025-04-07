@@ -34,7 +34,7 @@ class GroupElectroController extends Controller
     {
         $groupElectro = new GroupElectro();
         $groupElectro->name = $request->input('name');
-        $groupElectro->budget_excel = $request->input('budget_excel');
+        $groupElectro->budget_excel = $request->file('budget_excel')->store('excels', 'private');
         $groupElectro->holder = $request->input('holder');
         $groupElectro->address = $request->input('address');
         $groupElectro->cod_address = $request->input('cod_address');
@@ -44,12 +44,34 @@ class GroupElectroController extends Controller
         $groupElectro->location = $request->input('location');
         $groupElectro->cod_location = $request->input('cod_location');
         $groupElectro->name_location = $request->input('name_location');
+        $groupElectro->build = $request->input('build');
+        $groupElectro->kva = $request->input('kva');
+        $groupElectro->kw = $request->input('kw');
+        $groupElectro->tension_type = $request->input('tension_type');
+        $groupElectro->type_clasi = $request->input('type_clasi');
+        $groupElectro->mark = $request->input('mark');
+        $groupElectro->model = $request->input('model');
+        $groupElectro->voltage = $request->input('voltage');
+        $groupElectro->air_entry = $request->input('air_entry');
+        $groupElectro->air_flow = $request->input('air_flow');
+        $groupElectro->w = $request->input('w');
+        $groupElectro->factor = $request->input('factor');
           
     
         // En caso de que se suba la imagen
         if ($request->hasFile('cover')) {
             // Metodo para guardar varios archivos en el mismo lugar (en este caso en el /storage/public)
             $groupElectro->cover = $request->file('cover')->store('covers', 'public');
+        }
+        // En caso de que se suba la imagen del modelo
+        if ($request->hasFile('image_model')) {
+            // Metodo para guardar varios archivos en el mismo lugar (en este caso en el /storage/public)
+            $groupElectro->image_model = $request->file('image_model')->store('imagemodels', 'public');
+        }
+        // En caso de que se suba la imagen de las dimensiones
+        if ($request->hasFile('image_dimensions')) {
+            // Metodo para guardar varios archivos en el mismo lugar (en este caso en el /storage/public)
+            $groupElectro->image_dimensions = $request->file('image_dimensions')->store('imagedimensions', 'public');
         }
         //Despues de cazar todos los datos del formulario se guarda
         $groupElectro->save();
@@ -79,6 +101,7 @@ class GroupElectroController extends Controller
     public function update(GroupElectroRequest $request, GroupElectro $groupElectro)
     {
         $groupElectro->name = $request->input('name');
+        $groupElectro->budget_excel = $request->file('budget_excel')->store('excels', 'private');
         $groupElectro->holder = $request->input('holder');
         $groupElectro->address = $request->input('address');
         $groupElectro->cod_address = $request->input('cod_address');
@@ -88,15 +111,47 @@ class GroupElectroController extends Controller
         $groupElectro->location = $request->input('location');
         $groupElectro->cod_location = $request->input('cod_location');
         $groupElectro->name_location = $request->input('name_location');
-    
+        $groupElectro->build = $request->input('build');
+        $groupElectro->kva = $request->input('kva');
+        $groupElectro->kw = $request->input('kw');
+        $groupElectro->tension_type = $request->input('tension_type');
+        $groupElectro->type_clasi = $request->input('type_clasi');
+        $groupElectro->mark = $request->input('mark');
+        $groupElectro->model = $request->input('model');
+        $groupElectro->voltage = $request->input('voltage');
+        $groupElectro->air_entry = $request->input('air_entry');
+        $groupElectro->air_flow = $request->input('air_flow');
+        $groupElectro->w = $request->input('w');
+        $groupElectro->factor = $request->input('factor');
+        
         // En caso de que se suba la imagen
         if ($request->hasFile('cover')) {
+            // Elimina la imagen anterior si existe
+            if ($groupElectro->cover) {
+                Storage::delete($groupElectro->cover);
+            }
             // Metodo para guardar varios archivos en el mismo lugar (en este caso en el /storage/public)
             $groupElectro->cover = $request->file('cover')->store('covers', 'public');
         }
-        // En caso de que se suba el excel
-        if ($request->hasFile('budget_excel')) {
-            $groupElectro->budget_excel = $request->file('budget_excel')->store('budgets', 'public');
+
+        // En caso de que se suba la imagen del modelo
+        if ($request->hasFile('image_model')) {
+            // Elimina la imagen anterior si existe
+            if ($groupElectro->image_model) {
+                Storage::delete($groupElectro->image_model);
+            }
+            // Metodo para guardar varios archivos en el mismo lugar (en este caso en el /storage/public)
+            $groupElectro->image_model = $request->file('image_model')->store('imagemodels', 'public');
+        }
+
+        // En caso de que se suba la imagen de las dimensiones
+        if ($request->hasFile('image_dimensions')) {
+            // Elimina la imagen anterior si existe
+            if ($groupElectro->image_dimensions) {
+                Storage::delete($groupElectro->image_dimensions);
+            }
+            // Metodo para guardar varios archivos en el mismo lugar (en este caso en el /storage/public)
+            $groupElectro->image_dimensions = $request->file('image_dimensions')->store('imagedimensions', 'public');
         }
 
         //Despues de cazar todos los datos del formulario se guarda
@@ -113,6 +168,9 @@ class GroupElectroController extends Controller
         if ($groupElectro->cover) {
             Storage::delete($groupElectro->cover);
         }
+        if ($groupElectro->image_model) {
+            Storage::delete($groupElectro->image_model);
+        }
         $groupElectro->delete();
         return redirect()->route('form.index');
     }
@@ -123,6 +181,9 @@ class GroupElectroController extends Controller
         $sheet = $spreadsheet->getActiveSheet();
 
         return [
+            'budget' => floatval($sheet->getCell('')->getValue()),
+            'u7' => floatval($sheet->getCell('U7')->getValue()),
+            'z7' => floatval($sheet->getCell('Z7')->getValue()),
             'budget' => floatval($sheet->getCell('')->getValue()),
             // Seguir colocando los demas datos del excel
         ];
@@ -151,14 +212,65 @@ class GroupElectroController extends Controller
         $templateProcessor->setValue('build', $groupElectro->build);
         $templateProcessor->setValue('kva', $groupElectro->kva);
         $templateProcessor->setValue('kw', $groupElectro->kw);
+        $templateProcessor->setValue ('mark', $groupElectro->mark);
+        $templateProcessor->setValue ('model', $groupElectro->model);
+        $templateProcessor->setValue ('air_entry', $groupElectro->air_entry);
+        $templateProcessor->setValue ('air_flow', $groupElectro->air_flow);
+
+        // Datos del excel
+        $templateProcessor->setValue('budget', number_format($datesExcel['budget'], 2, ',', '.'));
 
         $tensionText = $groupElectro->tension_type === '3F+N'
-            ? 'La tensión será alterna trifásica, de 400 V entre fases y 230 V entre fase y neutro.'
-            : 'La tensión será alterna, de 230 V entre fase y neutro.';
+            ? 'trifásica, de 400 V entre fases y 230 V entre fase y neutro.'
+            : 'de 230 V entre fase y neutro.';
         $templateProcessor->setValue('tension_type', $tensionText);
 
-        $presupuestoFormat = number_format($groupElectro->budget, 2, ',', '.');
-        $templateProcessor->setValue('presupuesto_total', $presupuestoFormat);
+        
+        //Terminar de hacer el tipo de clasificacion
+        $tensionText = $groupElectro->type_clasi === 'mojado'
+            ? 'trifásica, de 400 V entre fases y 230 V entre fase y neutro.'
+            : 'de 230 V entre fase y neutro.';
+        $templateProcessor->setValue('type_clasi', $tensionText);
+
+        $tensionService = $groupElectro->voltage === '3F+N'
+            ? '400/230V'
+            : '230V';
+        $templateProcessor->setValue('voltage', $tensionService);
+
+        //Imagenes
+        if ($groupElectro->cover) {
+            $imagePath = storage_path('app/public/'. $groupElectro->cover);
+            if (file_exists($imagePath)) {
+                $templateProcessor->setImageValue('cover', [
+                    'path' => $imagePath,
+                    'widht' => 150,
+                    'heigh' => 150,
+                    'ratio' => true,
+                ]);
+            }
+        }
+        if ($groupElectro->image_model) {
+            $imagePath = storage_path('app/public/'. $groupElectro->image_model);
+            if (file_exists($imagePath)) {
+                $templateProcessor->setImageValue('image_model', [
+                    'path' => $imagePath,
+                    'widht' => 400,
+                    'heigh' => 267,
+                    'ratio' => false,
+                ]);
+            }
+        }
+        if ($groupElectro->image_dimensions) {
+            $imagePath = storage_path('app/public/'. $groupElectro->image_dimensions);
+            if (file_exists($imagePath)) {
+                $templateProcessor->setImageValue('image_dimensions', [
+                    'path' => $imagePath,
+                    'widht' => 184,
+                    'heigh' => 129,
+                    'ratio' => false,
+                ]);
+            }
+        }
 
         $templateProcessor->saveAs($outputPath);
 
