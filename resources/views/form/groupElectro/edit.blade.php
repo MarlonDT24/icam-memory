@@ -10,40 +10,36 @@
             </div>
 
             <div class="card-body">
-                <form action="{{ route('form.update', $form->id) }}" method="POST" enctype="multipart/form-data">
+                <form action="{{ route('groupElectro.update', $groupElectro->id) }}" method="POST" enctype="multipart/form-data">
                     @csrf
                     @method('PUT')
                     
                     <div class="mb-3">
                         <label class="form-label" for="name">Nombre de la Memoria:</label>
-                        <input class="form-control" type="text" id="name" name="name"
-                            value="{{ old('name') ? old('name') : $groupElectro->name }}">
-                        @error('name') <small class="text-danger">{{ $message }}</small>@enderror
+                        <input class="form-control" type="text" id="name" name="name" value="{{ old('name') ? old('name') :  $groupElectro->name }}">
+                        @error('name') <small class="text-danger">{{ $message }}</small> @enderror
                     </div>
 
                     <div class="mb-3">
                         <label class="form-label" for="budget_excel">Subir Excel:</label>
-                        <p class="mb-2">
-                            Excel: {{ basename($groupElectro->budget_excel) }}
-                        </p>
-                        <input class="form-control" type="file" id="budget_excel" name="budget_excel" accept=".xlsx, .xls">
-                        @error('budget_excel') <br>[ERROR]:{{ $message }} @enderror
+                        <input class="form-control" type="file" id="budget_excel" budget_excel="budget_excel" accept=".xlsx, .xls"
+                        value="{{ old('budget_excel') ? old('budget_excel') :  $groupElectro->budget_excel }}">
+                        @error('budget_excel') <small class="text-danger">{{ $message }}</small> @enderror
                     </div>
                     
-                    <h5 class="mt-5 mb-3">Características</h5>
+                    <h5 class="mt-4">Características</h5>
                     <div class="row mb-3">
                         <div class="col-md-8">
                             <label class="form-label" for="holder">Nombre del Titular:</label>
-                            <input class="form-control" type="text" id="holder" name="holder"  value="{{ old('holder', $groupElectro->holder) }}">
-                            @error('holder') <small class="text-danger">{{ $message }}</small>@enderror
+                            <input class="form-control" type="text" id="holder" name="holder" value="{{ old('holder', $groupElectro->holder) }}">
+                            @error('holder') <small class="text-danger">{{ $message }}</small> @enderror
                         </div>
 
                         <div class="col-md-4">
                             <label class="form-label" for="cover">Imagen (opcional):</label>
-                            @if ($form->cover)
+                            @if ($groupElectro->cover)
                                 <div class="mb-2">
-                                    <img src="{{ asset('storage/covers/' . basename($groupElectro->cover)) }}" alt="Portada actual"
-                                        width="200px">
+                                    <img src="{{ asset('storage/covers/' . basename($groupElectro->cover)) }}" alt="Portada actual" width="200px">
                                 </div>
                             @endif
                             <input class="form-control" type="file" id="cover" name="cover" accept="image/*">
@@ -80,7 +76,6 @@
                         @error('nif') <small class="text-danger">{{ $message }}</small> @enderror
                     </div>
 
-                    <h5 class="mt-4">Emplazamiento:</h5>
                     <div class="mb-3">
                         <label class="form-label" for="location">Dirección del Emplazamiento:</label>
                         <input class="form-control" type="text" id="location" name="location" value="{{ old('location', $groupElectro->location) }}">
@@ -107,32 +102,112 @@
 
                     <div class="mb-3">
                         <label class="form-label" for="kva">Potencia Instalada en KVA:</label>
-                        <input class="form-control" type="text" id="kva" name="kva" value="{{ old('kva', $groupElectro->kva) }}">
+                        <input class="form-control" step="0.01" type="number" id="kva" name="kva" value="{{ old('kva', $groupElectro->kva) }}">
                         @error('kva') <small class="text-danger">{{ $message }}</small> @enderror
                     </div>
 
                     <div class="mb-3">
+                        <label class="form-label" for="kw">Potencia Instalada en KW:</label>
+                        <input class="form-control" step="0.01" type="number" id="kw" name="kw" value="{{ old('kw', $groupElectro->kw) }}">
+                        @error('kw') <small class="text-danger">{{ $message }}</small> @enderror
+                    </div>
+
+                    {{-- Mirar si se guarda la opcion en .edit --}}
+                    <div class="mb-3">
                         <label class="form-label" for="tension_type">Tensión Simple y Compuesta en V:</label>
-                        <select class="form-select" id="tension_type" name="tension_type">
+                        <select class="form-select" id="tension_type" name="tension_type" data-bs-toggle="tooltip" title="Seleccione el tipo de tensión">
                             <option value="">-- Seleccione --</option>
-                            <option value="3F+N" {{ old('tension_type', $groupElectro->tension_type) == '3F+N' ? 'selected' : '' }}>3F+N (Trifásica)</option>
-                            <option value="F+N" {{ old('tension_type', $groupElectro->tension_type) == 'F+N' ? 'selected' : '' }}>F+N (Monofásica)</option>
+                            <option value="3F+N" {{ old('tension_type', $groupElectro->tension_type ?? '') == '3F+N' ? 'selected' : '' }}>3F+N (Trifásica)</option>
+                            <option value="F+N" {{ old('tension_type', $groupElectro->tension_type ?? '') == 'F+N' ? 'selected' : '' }}>F+N (Monofásica)</option>
                         </select>
-                        @error('tension_type') <small class="text-danger">{{ $message }}</small> @enderror
+                        @error('tension_type') <br>[ERROR]:{{ $message }} @enderror
                     </div>
 
                     <div class="mb-3">
-                        <label class="form-label" for="m_surface">Metros Cuadrados de la Superficie:</label>
-                        <input class="form-control" type="text" id="m_surface" name="m_surface" value="{{ old('m_surface', $form->m_surface) }}">
-                        @error('m_surface') <small class="text-danger">{{ $message }}</small> @enderror
+                        <label class="form-label" for="budget">Presupuesto Total de la Instalación:</label>
+                        <input class="form-control" step="0.01" type="number" id="budget" name="budget" value="{{ old('budget', $groupElectro->budget) }}">
+                        @error('budget') <small class="text-danger">{{ $message }}</small> @enderror
                     </div>
 
-                    <h5 class="mt-4">Requerimientos de la Instalación respecto a los Servicios Públicos Municipales:</h5>
+                    {{-- Mirar si se guarda la opcion en .edit --}}
                     <div class="mb-3">
-                        <label for="requirements">REQUERIMIENTOS DE LA INSTALACIÓN RESPECTO A LOS SERVICIOS PÚBLICOS
-                            MUNICIPALES:</label>
-                        <textarea class="form-control" id="requirements" name="requirements" rows="4">{{ old('requirements') ? old('requirements') : $form->requirements }}</textarea>
-                        @error('requirements') <small class="text-danger">{{ $message }}</small> @enderror
+                        <label class="form-label" for="type_clasi">Tipo de clasificación:</label>
+                        <select class="form-select" id="type_clasi" name="type_clasi" data-bs-toggle="tooltip" title="Seleccione el tipo de clasificación">
+                            <option value="">-- Seleccione --</option>
+                            <option value="mojado" {{ old('type_clasi', $groupElectro->type_clasi ?? '') == 'mojado' ? 'selected' : '' }}>Tipo Mojado</option>
+                            <option value="F+N" {{ old('type_clasi', $groupElectro->type_clasi ?? '') == 'F+N' ? 'selected' : '' }}>F+N (Monofásica)</option>
+                        </select>
+                        @error('type_clasi') <br>[ERROR]:{{ $message }} @enderror
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label" for="mark">Marca:</label>
+                        <input class="form-control" type="text" id="mark" name="mark" value="{{ old('mark', $groupElectro->mark) }}">
+                        @error('mark') <small class="text-danger">{{ $message }}</small> @enderror
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-md-4">
+                            <label class="form-label" for="model">Model:</label>
+                            <input class="form-control" type="text" id="model" name="model" value="{{ old('model', $groupElectro->model) }}">
+                            @error('model') <small class="text-danger">{{ $message }}</small> @enderror
+                        </div>
+    
+                        <div class="col-md-4">
+                            <label class="form-label" for="image_model">Imagen del Modelo:</label>
+                            <div class="mb-2">
+                                <img src="{{ asset('storage/imagemodels/' . basename($groupElectro->image_model)) }}" alt="imagen del modelo"
+                                    width="200px">
+                            </div>
+                            <input class="form-control" type="file" id="image_model" name="image_model" accept="image/*">
+                            @error('image_model') <small class="text-danger">{{ $message }}</small> @enderror
+                        </div>
+    
+                        <div class="col-md-4">
+                            <label class="form-label" for="image_dimensions">Imagen de las Dimensiones:</label>
+                            <div class="mb-2">
+                                <img src="{{ asset('storage/imagedimensions/' . basename($groupElectro->image_dimensions)) }}" alt="imagen de las dimensiones"
+                                    width="200px">
+                            </div>
+                            <input class="form-control" type="file" id="image_dimensions" name="image_dimensions" accept="image/*">
+                            @error('image_dimensions') <small class="text-danger">{{ $message }}</small> @enderror
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label" for="voltage">Tensión de servicio:</label>
+                        <select class="form-select" id="voltage" name="voltage" data-bs-toggle="tooltip" title="Seleccione el tipo de tensión de servicio">
+                            <option value="">-- Seleccione --</option>
+                            <option value="3F+N" {{ old('voltage', $groupElectro->voltage ?? '') == '3F+N' ? 'selected' : '' }}>400/230V (Trifásica)</option>
+                            <option value="F+N" {{ old('voltage', $groupElectro->voltage ?? '') == 'F+N' ? 'selected' : '' }}>230V (Monofásica)</option>
+                        </select>
+                        @error('voltage') <br>[ERROR]:{{ $message }} @enderror
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label" for="air_entry">Entrada de aire en m3/h:</label>
+                        <input class="form-control" step="0.01" type="number" id="air_entry" name="air_entry" value="{{ old('air_entry', $groupElectro->air_entry) }}">
+                        @error('air_entry') <small class="text-danger">{{ $message }}</small> @enderror
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label" for="air_flow">Entrada de flujo en m3/minuto:</label>
+                        <input class="form-control" step="0.01" type="number" id="air_flow" name="air_flow" value="{{ old('air_flow', $groupElectro->air_flow) }}">
+                        @error('air_flow') <small class="text-danger">{{ $message }}</small> @enderror
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-md-4">
+                            <label class="form-label" for="w">Potencia en W:</label>
+                            <input class="form-control" step="0.01" type="number" id="w" name="w" value="{{ old('w', $groupElectro->w) }}">
+                            @error('w') <small class="text-danger">{{ $message }}</small> @enderror
+                        </div>
+    
+                        <div class="col-md-4">
+                            <label class="form-label" for="factor">Factor de Potencia del Grupo:</label>
+                            <input class="form-control" step="0.01" type="number" id="factor" name="factor" value="{{ old('factor', $groupElectro->factor) }}">
+                            @error('factor') <small class="text-danger">{{ $message }}</small> @enderror
+                        </div>
                     </div>
 
                     <div class="d-flex justify-content-left">

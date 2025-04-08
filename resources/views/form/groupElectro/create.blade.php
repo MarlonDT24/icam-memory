@@ -204,7 +204,7 @@
                         </div>
 
                         <div class="col-md-4">
-                            <label class="form-label" for="factor">Factor de potencia del grupo:</label>
+                            <label class="form-label" for="factor">Factor de Potencia del grupo:</label>
                             <input class="form-control" step="0.01" type="number" id="factor" name="factor" value="{{ old('factor') }}" data-bs-toggle="tooltip" title="Introduzca el factor de potencia">
                             @error('factor') <br>[ERROR]:{{ $message }} @enderror
                         </div>

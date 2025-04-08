@@ -112,8 +112,8 @@
                                 <!-- Acciones -->
                                 <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
                                     <div class="d-flex flex-column align-items-center gap-2">
-                                        <a class="btn btn-primary" href="{{ route('form.show', $form->id) }}">Ver Más Detalles</a>
-                                        <a class="btn btn-warning" href="{{ route('form.edit', $form->id) }}">Editar</a>
+                                        <a class="btn btn-success" href="{{ route('form.show', $form->id) }}">Ver Más Detalles</a>
+                                        <a class="btn btn-primary" href="{{ route('form.edit', $form->id) }}">Editar</a>
                                         <form action="{{ route('form.destroy', $form->id) }}" method="post">
                                             @csrf
                                             @method('delete')
@@ -159,8 +159,8 @@
                                 <!-- Acciones -->
                                 <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
                                     <div class="d-flex flex-column align-items-center gap-2">
-                                        <a class="btn btn-primary" href="{{ route('groupElectro.show', $group->id) }}">Ver Más Detalles</a>
-                                        <a class="btn btn-warning" href="{{ route('groupElectro.edit', $group->id) }}">Editar</a>
+                                        <a class="btn btn-success" href="{{ route('groupElectro.show', $group->id) }}">Ver Más Detalles</a>
+                                        <a class="btn btn-primary" href="{{ route('groupElectro.edit', $group->id) }}">Editar</a>
                                         <form action="{{ route('groupElectro.destroy', $group->id) }}" method="post">
                                             @csrf
                                             @method('delete')
