@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('group_electros', function (Blueprint $table) {
             $table->id();
             $table->string('name');
+            $table->string('budget_excel');
             $table->string('cover')->nullable();
             $table->text('holder');
             $table->text('address');

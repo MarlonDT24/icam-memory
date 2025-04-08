@@ -10,6 +10,7 @@ Route::get('/', [FormController::class, 'index'])->name('principal');
 
 // Se usa el FormController para las vistas de Compatibilidad
 Route::resource('form', FormController::class)->names('form');
+Route::get('/form/{form}/word', [FormController::class, 'convertToWord'])->name('form.convertToWord');
 
 // Memorias para el Grupo Electrogeno
 Route::resource('groupElectro', GroupElectroController::class)->names('groupElectro');

@@ -48,6 +48,7 @@ class GroupElectroController extends Controller
         $groupElectro->kva = $request->input('kva');
         $groupElectro->kw = $request->input('kw');
         $groupElectro->tension_type = $request->input('tension_type');
+        $groupElectro->budget = $request->input('budget');
         $groupElectro->type_clasi = $request->input('type_clasi');
         $groupElectro->mark = $request->input('mark');
         $groupElectro->model = $request->input('model');
@@ -115,6 +116,7 @@ class GroupElectroController extends Controller
         $groupElectro->kva = $request->input('kva');
         $groupElectro->kw = $request->input('kw');
         $groupElectro->tension_type = $request->input('tension_type');
+        $groupElectro->budget = $request->input('budget');
         $groupElectro->type_clasi = $request->input('type_clasi');
         $groupElectro->mark = $request->input('mark');
         $groupElectro->model = $request->input('model');
@@ -181,10 +183,20 @@ class GroupElectroController extends Controller
         $sheet = $spreadsheet->getActiveSheet();
 
         return [
-            'budget' => floatval($sheet->getCell('')->getValue()),
             'u7' => floatval($sheet->getCell('U7')->getValue()),
             'z7' => floatval($sheet->getCell('Z7')->getValue()),
-            'budget' => floatval($sheet->getCell('')->getValue()),
+            'c9' => floatval($sheet->getCell('C9')->getValue()),
+            'u9' => floatval($sheet->getCell('U9')->getValue()),
+            'z9' => floatval($sheet->getCell('Z9')->getValue()),
+            'c10' => floatval($sheet->getCell('C10')->getValue()),
+            'u10' => floatval($sheet->getCell('U10')->getValue()),
+            'z10' => floatval($sheet->getCell('Z10')->getValue()),
+            'c11' => floatval($sheet->getCell('C11')->getValue()),
+            'u11' => floatval($sheet->getCell('U11')->getValue()),
+            'z11' => floatval($sheet->getCell('Z11')->getValue()),
+            'c12' => floatval($sheet->getCell('C12')->getValue()),
+            'u12' => floatval($sheet->getCell('U12')->getValue()),
+            'z12' => floatval($sheet->getCell('Z12')->getValue()),
             // Seguir colocando los demas datos del excel
         ];
 
@@ -192,7 +204,7 @@ class GroupElectroController extends Controller
 
     public function convertToWord(GroupElectro $groupElectro)
     {
-        $templatePath = storage_path('app/private/plantillas/memoria_IEBT-modif-copia.doc');
+        $templatePath = storage_path('app/private/plantillas/memoria_IEBT-GE_2032-modif-copia.doc');
         $outputPath = storage_path('app/public/' . $groupElectro->name . '.doc');
 
         $datesExcel = $this->getExcelDate(storage_path('app/private/excels'. $groupElectro->budget_excel));
@@ -212,13 +224,27 @@ class GroupElectroController extends Controller
         $templateProcessor->setValue('build', $groupElectro->build);
         $templateProcessor->setValue('kva', $groupElectro->kva);
         $templateProcessor->setValue('kw', $groupElectro->kw);
+        $templateProcessor->setValue('budget', $groupElectro->budget);
         $templateProcessor->setValue ('mark', $groupElectro->mark);
         $templateProcessor->setValue ('model', $groupElectro->model);
         $templateProcessor->setValue ('air_entry', $groupElectro->air_entry);
         $templateProcessor->setValue ('air_flow', $groupElectro->air_flow);
 
         // Datos del excel
-        $templateProcessor->setValue('budget', number_format($datesExcel['budget'], 2, ',', '.'));
+        $templateProcessor->setValue('u7', number_format($datesExcel['u7'], 2, ',', '.'));
+        $templateProcessor->setValue('z7', number_format($datesExcel['z7'], 2, ',', '.'));
+        $templateProcessor->setValue('c9', number_format($datesExcel['c9'], 2, ',', '.'));
+        $templateProcessor->setValue('u9', number_format($datesExcel['u9'], 2, ',', '.'));
+        $templateProcessor->setValue('z9', number_format($datesExcel['z9'], 2, ',', '.'));
+        $templateProcessor->setValue('c10', number_format($datesExcel['c10'], 2, ',', '.'));
+        $templateProcessor->setValue('u10', number_format($datesExcel['u10'], 2, ',', '.'));
+        $templateProcessor->setValue('z10', number_format($datesExcel['z10'], 2, ',', '.'));
+        $templateProcessor->setValue('c11', number_format($datesExcel['c11'], 2, ',', '.'));
+        $templateProcessor->setValue('u11', number_format($datesExcel['u11'], 2, ',', '.'));
+        $templateProcessor->setValue('z11', number_format($datesExcel['z11'], 2, ',', '.'));
+        $templateProcessor->setValue('c12', number_format($datesExcel['c12'], 2, ',', '.'));
+        $templateProcessor->setValue('u12', number_format($datesExcel['u12'], 2, ',', '.'));
+        $templateProcessor->setValue('z12', number_format($datesExcel['z12'], 2, ',', '.'));
 
         $tensionText = $groupElectro->tension_type === '3F+N'
             ? 'trifásica, de 400 V entre fases y 230 V entre fase y neutro.'

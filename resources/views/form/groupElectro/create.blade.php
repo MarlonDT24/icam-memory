@@ -33,6 +33,9 @@
 
                     <div class="mb-3">
                         <label class="form-label" for="budget_excel">Subir Excel:</label>
+                        @if(isset($groupElectro) && $groupElectro->budget_excel)
+                            <p class="mt-1">Archivo actual: {{ basename($groupElectro->budget_excel) }}</p>
+                        @endif
                         <input class="form-control" type="file" id="budget_excel" name="budget_excel" accept=".xlsx, .xls">
                         @error('budget_excel') <br>[ERROR]:{{ $message }} @enderror
                     </div>
@@ -108,13 +111,13 @@
 
                     <div class="mb-3">
                         <label class="form-label" for="kva">Potencia Instalada en KVA:</label>
-                        <input class="form-control" type="text" id="kva" name="kva" value="{{ old('kva') }}" data-bs-toggle="tooltip" title="Introduzca la potencia en KVA">
+                        <input class="form-control" step="0.01" type="number" id="kva" name="kva" value="{{ old('kva') }}" data-bs-toggle="tooltip" title="Introduzca la potencia en KVA">
                         @error('kva') <br>[ERROR]:{{ $message }} @enderror
                     </div>
 
                     <div class="mb-3">
                         <label class="form-label" for="kw">Potencia Instalada en KW:</label>
-                        <input class="form-control" type="text" id="kw" name="kw" value="{{ old('kw') }}" data-bs-toggle="tooltip" title="Introduzca la potencia en KW">
+                        <input class="form-control" step="0.01" type="number" id="kw" name="kw" value="{{ old('kw') }}" data-bs-toggle="tooltip" title="Introduzca la potencia en KW">
                         @error('kw') <br>[ERROR]:{{ $message }} @enderror
                     </div>
 
@@ -129,6 +132,12 @@
                     </div>
 
                     <div class="mb-3">
+                        <label class="form-label" for="budget">Presupuesto Total de la Instalación:</label>
+                        <input class="form-control" step="0.01" type="number" id="budget" name="budget" value="{{ old('budget') }}" data-bs-toggle="tooltip" title="Introduzca la marca">
+                        @error('budget') <br>[ERROR]:{{ $message }} @enderror
+                    </div>
+
+                    <div class="mb-3">
                         <label class="form-label" for="type_clasi">Tipo de clasificación:</label>
                         <select class="form-select" id="type_clasi" name="type_clasi" data-bs-toggle="tooltip" title="Seleccione el tipo de clasificación">
                             <option value="">-- Seleccione --</option>
@@ -137,23 +146,15 @@
                         </select>
                         @error('type_clasi') <br>[ERROR]:{{ $message }} @enderror
                     </div>
-
                     
                     <div class="mb-3">
                         <label class="form-label" for="mark">Marca:</label>
                         <input class="form-control" type="text" id="mark" name="mark" value="{{ old('mark') }}" data-bs-toggle="tooltip" title="Introduzca la marca">
                         @error('mark') <br>[ERROR]:{{ $message }} @enderror
                     </div>
-                    
-                    <div class="mb-3">
-                        <label class="form-label" for="model">Modelo:</label>
-                        <input class="form-control" type="text" id="model" name="model" value="{{ old('model') }}" data-bs-toggle="tooltip" title="Introduzca la marca">
-                        @error('model') <br>[ERROR]:{{ $message }} @enderror
-                    </div>
-
 
                     <div class="row mb-3">
-                        <div class="col-md-8">
+                        <div class="col-md-4">
                             <label class="form-label" for="model">Modelo:</label>
                             <input class="form-control" type="text" id="model" name="model" value="{{ old('model') }}" data-bs-toggle="tooltip" title="Introduzca el nombre del modelo">
                             @error('model') <br>[ERROR]:{{ $message }} @enderror
@@ -177,42 +178,36 @@
                         <label class="form-label" for="voltage">Tensión de servicio:</label>
                         <select class="form-select" id="voltage" name="voltage" data-bs-toggle="tooltip" title="Seleccione el tipo de tensión de servicio">
                             <option value="">-- Seleccione --</option>
-                            <option value="3F+N" {{ old('voltage') == '3F+N' ? 'selected' : '' }}>3F+N (Trifásica)</option>
-                            <option value="F+N" {{ old('voltage') == 'F+N' ? 'selected' : '' }}>F+N (Monofásica)</option>
+                            <option value="3F+N" {{ old('voltage') == '3F+N' ? 'selected' : '' }}>400/230V (Trifásica)</option>
+                            <option value="F+N" {{ old('voltage') == 'F+N' ? 'selected' : '' }}>230V (Monofásica)</option>
                         </select>
                         @error('voltage') <br>[ERROR]:{{ $message }} @enderror
                     </div>
                     
                     <div class="mb-3">
                         <label class="form-label" for="air_entry">Entrada de aire en m3/h:</label>
-                        <input class="form-control" type="text" id="air_entry" name="air_entry" value="{{ old('air_entry') }}" data-bs-toggle="tooltip" title="Introduzca la entrada de aire en m3/h">
+                        <input class="form-control" step="0.01" type="number" id="air_entry" name="air_entry" value="{{ old('air_entry') }}" data-bs-toggle="tooltip" title="Introduzca la entrada de aire en m3/h">
                         @error('air_entry') <br>[ERROR]:{{ $message }} @enderror
                     </div>
                     
                     <div class="mb-3">
                         <label class="form-label" for="air_flow">Entrada de flujo en m3/minuto:</label>
-                        <input class="form-control" type="text" id="air_flow" name="air_flow" value="{{ old('air_flow') }}" data-bs-toggle="tooltip" title="Introduzca la entrada de aire en m3/minuto">
+                        <input class="form-control" step="0.01" type="number" id="air_flow" name="air_flow" value="{{ old('air_flow') }}" data-bs-toggle="tooltip" title="Introduzca la entrada de aire en m3/minuto">
                         @error('air_flow') <br>[ERROR]:{{ $message }} @enderror
                     </div>
                     
                     <div class="row mb-3">
-                        <div class="col-md-8">
+                        <div class="col-md-4">
                             <label class="form-label" for="w">Potencia en W:</label>
-                            <input class="form-control" type="text" id="w" name="w" value="{{ old('w') }}" data-bs-toggle="tooltip" title="Introduzca la potencia en W">
+                            <input class="form-control" step="0.01" type="number" id="w" name="w" value="{{ old('w') }}" data-bs-toggle="tooltip" title="Introduzca la potencia en W">
                             @error('w') <br>[ERROR]:{{ $message }} @enderror
                         </div>
 
-                        <div class="col-md-8">
+                        <div class="col-md-4">
                             <label class="form-label" for="factor">Factor de potencia del grupo:</label>
-                            <input class="form-control" type="text" id="factor" name="factor" value="{{ old('factor') }}" data-bs-toggle="tooltip" title="Introduzca el factor de potencia">
+                            <input class="form-control" step="0.01" type="number" id="factor" name="factor" value="{{ old('factor') }}" data-bs-toggle="tooltip" title="Introduzca el factor de potencia">
                             @error('factor') <br>[ERROR]:{{ $message }} @enderror
                         </div>
-                    </div>
-                    
-                    <div class="mb-3">
-                        <label class="form-label" for="description">Descripción de la Actividad:</label>
-                        <textarea class="form-control" id="description" name="description" rows="4" data-bs-toggle="tooltip" title="Introduzca una descripción que se va a realizar">{{ old('description') }}</textarea>
-                        @error('description') <br>[ERROR]:{{ $message }} @enderror
                     </div>
                     
                     <div class="d-flex justify-content-left">

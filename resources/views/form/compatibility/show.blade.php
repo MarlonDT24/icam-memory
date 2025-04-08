@@ -100,8 +100,8 @@
         
         <!-- Botones de acciones -->
         <div class="d-flex flex-wrap gap-2 mb-4">
-            <a href="{{ route('form.convert.word', $form) }}" class="btn btn-primary">Descargar en Word</a>
-            <a href="{{ route('form.edit', $form->id) }}" class="btn btn-warning">Editar</a>
+            <a href="{{ route('form.convertToWord', $form) }}" class="btn btn-success">Descargar en Word</a>
+            <a href="{{ route('form.edit', $form->id) }}" class="btn btn-primary">Editar</a>
             <a href="{{ route('form.index', $form->id) }}" class="btn btn-secondary">Volver</a>
         </div>
         

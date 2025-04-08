@@ -17,7 +17,9 @@ class FormController extends Controller
     public function index()
     {
         $forms = Form::orderBy('created_at', 'DESC')->get();  //Las memorias se ordenan por fecha de creación
-        return view('form.index', compact('forms'));
+        $lowVoltages = \App\Models\LowVoltage::orderBy('created_at', 'DESC')->get();
+        $groupElectro = \App\Models\GroupElectro::orderBy('created_at', 'DESC')->get();
+        return view('form.index', compact('forms', 'lowVoltages', 'groupElectro'));
     }
 
     /**

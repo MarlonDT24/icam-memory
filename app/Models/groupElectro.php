@@ -11,8 +11,9 @@ class GroupElectro extends Model
 
     protected $fillable = [
         'name',
-        'cover',
+        'budget_excel',
         'holder',
+        'cover',
         'address',
         'cod_address',
         'cif',
@@ -29,9 +30,9 @@ class GroupElectro extends Model
         'type_clasi',
         'mark',
         'model',
-        'voltage',
         'image_model',
         'image_dimensions',
+        'voltage',
         'air_entry',
         'air_flow',
         'w',
