@@ -23,7 +23,7 @@ class GroupElectroRequest extends FormRequest
     {
         return [
             'name' => 'required|min:3',
-            'budget_excel' => $this->isMethod('post') ? 'required|file' : 'nullable|file',
+            'budget_excel' => $this->isMethod('post') ? 'required|file|mimes:xls,xlsx' : 'nullable|file|xls,xlsx',
             'holder' => 'required',
             'address' => 'required|min:5',
             'cod_address' => 'required|min:5',

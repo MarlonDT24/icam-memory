@@ -8,6 +8,9 @@ use App\Http\Requests\GroupElectroRequest;
 use Illuminate\Support\Facades\Storage;
 use PhpOffice\PhpWord\TemplateProcessor;
 use PhpOffice\PhpSpreadsheet\IOFactory;
+use PhpOffice\PhpSpreadsheet\Reader\Exception as ReaderException;
+use PhpOffice\PhpSpreadsheet\Reader\Xls;
+use PhpOffice\PhpSpreadsheet\Reader\Xlsx;
 
 class GroupElectroController extends Controller
 {
@@ -34,7 +37,8 @@ class GroupElectroController extends Controller
     {
         $groupElectro = new GroupElectro();
         $groupElectro->name = $request->input('name');
-        $groupElectro->budget_excel = $request->file('budget_excel')->store('excels', 'private');
+        $groupElectro->budget_excel = $request->file('budget_excel')->store('excels', 'private'); //Se define donde se va a guardar
+        //dd($path); 
         $groupElectro->holder = $request->input('holder');
         $groupElectro->address = $request->input('address');
         $groupElectro->cod_address = $request->input('cod_address');
@@ -179,9 +183,21 @@ class GroupElectroController extends Controller
 
     public function getExcelDate($file)
     {
-        $spreadsheet = IOFactory::load($file);
+        if (!file_exists($file)) {
+            throw new \Exception("El archivo no existe: $file");
+        }
+    
+        try {
+            // Usa IOFactory para detectar el tipo real del archivo (xls o xlsx)
+            $type = IOFactory::identify($file);
+            $reader = IOFactory::createReader($type);
+            $spreadsheet = $reader->load($file);
+        } catch (\Throwable $e) {
+            throw new \Exception("Error al leer el archivo Excel: " . $e->getMessage());
+        }
+    
         $sheet = $spreadsheet->getActiveSheet();
-
+    
         return [
             'u7' => floatval($sheet->getCell('U7')->getValue()),
             'z7' => floatval($sheet->getCell('Z7')->getValue()),
@@ -197,17 +213,17 @@ class GroupElectroController extends Controller
             'c12' => floatval($sheet->getCell('C12')->getValue()),
             'u12' => floatval($sheet->getCell('U12')->getValue()),
             'z12' => floatval($sheet->getCell('Z12')->getValue()),
-            // Seguir colocando los demas datos del excel
         ];
-
     }
 
     public function convertToWord(GroupElectro $groupElectro)
     {
-        $templatePath = storage_path('app/private/plantillas/memoria_IEBT-GE_2032-modif-copia.doc');
+        $templatePath = storage_path('app/private/plantillas/memoria_IEBT-GE_2032-modif-copia.docx');
         $outputPath = storage_path('app/public/' . $groupElectro->name . '.doc');
 
-        $datesExcel = $this->getExcelDate(storage_path('app/private/excels'. $groupElectro->budget_excel));
+        // Ya contiene la ruta relativa puesta ya en store() y ademas ya esta configurado en config/filesystems.php
+        $excelPath = Storage::disk('private')->path($groupElectro->budget_excel);
+        $datesExcel = $this->getExcelDate($excelPath);
 
         $templateProcessor = new TemplateProcessor($templatePath);
 

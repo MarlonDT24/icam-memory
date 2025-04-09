@@ -14,6 +14,7 @@ Route::get('/form/{form}/word', [FormController::class, 'convertToWord'])->name(
 
 // Memorias para el Grupo Electrogeno
 Route::resource('groupElectro', GroupElectroController::class)->names('groupElectro');
+Route::get('/groupElectro/{groupElectro}/word', [GroupElectroController::class, 'convertToWord'])->name('groupElectro.convertToWord');
 
 /* Route::prefix('grupo-electrogeno')->name('groupElectro.')->group(function () {
     Route::get('/crear', [GroupElectroController::class, 'create'])->name('create');

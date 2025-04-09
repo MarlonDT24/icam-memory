@@ -138,7 +138,7 @@
                     </div>
 
                     <div class="mb-3">
-                        <label class="form-label" for="type_clasi">Tipo de clasificación:</label>
+                        <label class="form-label" for="type_clasi">Tipo de Clasificación:</label>
                         <select class="form-select" id="type_clasi" name="type_clasi" data-bs-toggle="tooltip" title="Seleccione el tipo de clasificación">
                             <option value="">-- Seleccione --</option>
                             <option value="mojado" {{ old('type_clasi') == 'mojado' ? 'selected' : '' }}>Tipo Mojado</option>
@@ -161,13 +161,13 @@
                         </div>
 
                         <div class="col-md-4">
-                            <label class="form-label" for="image_model">Imagen del modelo:</label>
+                            <label class="form-label" for="image_model">Imagen del Modelo:</label>
                             <input class="form-control" type="file" id="image_model" name="image_model" accept="image/*" data-bs-toggle="tooltip" title="Puede añadir una imagen del modelo">
                             @error('image_model') <br>[ERROR]:{{ $message }} @enderror
                         </div>
 
                         <div class="col-md-4">
-                            <label class="form-label" for="image_dimensions">Imagen de las dimensiones:</label>
+                            <label class="form-label" for="image_dimensions">Imagen de las Dimensiones:</label>
                             <input class="form-control" type="file" id="image_dimensions" name="image_dimensions" accept="image/*" data-bs-toggle="tooltip" title="Puede añadir una imagen de las dimensiones">
                             @error('image_dimensions') <br>[ERROR]:{{ $message }} @enderror
                         </div>
@@ -175,7 +175,7 @@
 
                     
                     <div class="mb-3">
-                        <label class="form-label" for="voltage">Tensión de servicio:</label>
+                        <label class="form-label" for="voltage">Tensión de Servicio:</label>
                         <select class="form-select" id="voltage" name="voltage" data-bs-toggle="tooltip" title="Seleccione el tipo de tensión de servicio">
                             <option value="">-- Seleccione --</option>
                             <option value="3F+N" {{ old('voltage') == '3F+N' ? 'selected' : '' }}>400/230V (Trifásica)</option>
@@ -185,13 +185,13 @@
                     </div>
                     
                     <div class="mb-3">
-                        <label class="form-label" for="air_entry">Entrada de aire en m3/h:</label>
+                        <label class="form-label" for="air_entry">Entrada de Aire en m3/h:</label>
                         <input class="form-control" step="0.01" type="number" id="air_entry" name="air_entry" value="{{ old('air_entry') }}" data-bs-toggle="tooltip" title="Introduzca la entrada de aire en m3/h">
                         @error('air_entry') <br>[ERROR]:{{ $message }} @enderror
                     </div>
                     
                     <div class="mb-3">
-                        <label class="form-label" for="air_flow">Entrada de flujo en m3/minuto:</label>
+                        <label class="form-label" for="air_flow">Entrada de Flujo en m3/minuto:</label>
                         <input class="form-control" step="0.01" type="number" id="air_flow" name="air_flow" value="{{ old('air_flow') }}" data-bs-toggle="tooltip" title="Introduzca la entrada de aire en m3/minuto">
                         @error('air_flow') <br>[ERROR]:{{ $message }} @enderror
                     </div>
@@ -204,7 +204,7 @@
                         </div>
 
                         <div class="col-md-4">
-                            <label class="form-label" for="factor">Factor de Potencia del grupo:</label>
+                            <label class="form-label" for="factor">Factor de Potencia del Grupo:</label>
                             <input class="form-control" step="0.01" type="number" id="factor" name="factor" value="{{ old('factor') }}" data-bs-toggle="tooltip" title="Introduzca el factor de potencia">
                             @error('factor') <br>[ERROR]:{{ $message }} @enderror
                         </div>
