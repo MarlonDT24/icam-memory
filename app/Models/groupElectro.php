@@ -11,6 +11,7 @@ class GroupElectro extends Model
 
     protected $fillable = [
         'name',
+        'author',
         'budget_excel',
         'holder',
         'cover',
@@ -37,6 +38,8 @@ class GroupElectro extends Model
         'air_flow',
         'w',
         'factor',
+        'fecha',
+        'method',
     ];
 
     protected $casts = [

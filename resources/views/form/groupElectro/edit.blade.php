@@ -210,6 +210,12 @@
                         </div>
                     </div>
 
+                    <div class="mb-3">
+                        <label class="form-label" for="method">Método de Refrigeración:</label>
+                        <textarea class="form-control" id="method" name="method" rows="3" >{{ old('method', $groupElectro->method) }}</textarea>
+                        @error('method') <small class="text-danger">{{ $message }}</small> @enderror
+                    </div>
+
                     <div class="d-flex justify-content-left">
                         <button type="submit" class="btn btn-primary me-2">Actualizar</button>
                         <a href="{{ route('form.index') }}" class="btn btn-secondary">Cancelar</a>

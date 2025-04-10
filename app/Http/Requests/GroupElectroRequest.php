@@ -23,6 +23,7 @@ class GroupElectroRequest extends FormRequest
     {
         return [
             'name' => 'required|min:3',
+            'author' => 'required',
             'budget_excel' => $this->isMethod('post') ? 'required|file|mimes:xls,xlsx' : 'nullable|file|xls,xlsx',
             'holder' => 'required',
             'address' => 'required|min:5',
@@ -48,6 +49,7 @@ class GroupElectroRequest extends FormRequest
             'air_flow' => 'required|numeric|min:0',
             'w' => 'required|numeric|min:0',
             'factor' => 'required|numeric|min:0',
+            'method' => 'required',
         ];
     }
 
@@ -56,6 +58,8 @@ class GroupElectroRequest extends FormRequest
         return [
             'name.required' => 'El Nombre de la Memoria es obligatorio',
             'name.min' => 'El Nombre de la Memoria debe tener al menos 3 carácteres',
+
+            'author.required' => 'El Autor de la Memoria es obligatorio',
             
             'budget_excel' => 'El Excel es obligatorio',
 
@@ -123,6 +127,8 @@ class GroupElectroRequest extends FormRequest
 
             'factor.required' => 'El Factor de Potencia es obligatorio',
             'factor.numeric' => 'El Factor de Potencia debe ser un número',
+
+            'method.required' => 'El Método de Refrigeración es obligatorio',
         ];
     }
 }

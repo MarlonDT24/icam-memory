@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('group_electros', function (Blueprint $table) {
             $table->id();
             $table->string('name');
+            $table->string('author');
             $table->string('budget_excel');
             $table->string('cover')->nullable();
             $table->text('holder');
@@ -40,6 +41,7 @@ return new class extends Migration
             $table->decimal('air_flow', 8, 2);
             $table->decimal('w', 8, 2);
             $table->decimal('factor', 5, 2);
+            $table->text('method');
             $table->timestamps();
         });
     }

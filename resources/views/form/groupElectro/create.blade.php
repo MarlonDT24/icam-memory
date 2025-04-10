@@ -25,30 +25,46 @@
                 <form action="{{ route('groupElectro.store') }}" method="POST" enctype="multipart/form-data">
                     @csrf
 
-                    <div class="mb-3">
-                        <label class="form-label" for="name">Nombre de la Memoria:</label>
-                        <input class="form-control" type="text" id="name" name="name" value="{{ old('name') }}" data-bs-toggle="tooltip" title="Introduzca el nombre de la memoria">
-                        @error('name') <br>[ERROR]:{{ $message }} @enderror
-                    </div>
-
-                    <div class="mb-3">
-                        <label class="form-label" for="budget_excel">Subir Excel:</label>
-                        @if(isset($groupElectro) && $groupElectro->budget_excel)
-                            <p class="mt-1">Archivo actual: {{ basename($groupElectro->budget_excel) }}</p>
-                        @endif
-                        <input class="form-control" type="file" id="budget_excel" name="budget_excel" accept=".xlsx, .xls">
-                        @error('budget_excel') <br>[ERROR]:{{ $message }} @enderror
+                    <h5 class="mt-2 mb-3">Datos de la Memoria</h5>
+                    <div class="row g-3">
+                        <div class="col-md-4">
+                            <label class="form-label" for="name">Nombre de la Memoria:</label>
+                            <input class="form-control" type="text" id="name" name="name" value="{{ old('name') }}" data-bs-toggle="tooltip" title="Introduzca el nombre de la memoria">
+                            @error('name') <br>[ERROR]:{{ $message }} @enderror
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label" for="author">Autor:</label>
+                            <select class="form-select" id="author" name="author" data-bs-toggle="tooltip" title="Autor para la firma de la memoria">
+                                <option value="">-- Seleccione --</option>
+                                <option value="luis_m" {{ old('author') == 'luis_m' ? 'selected' : '' }}>LUIS MIR (ICLM)</option>
+                                <option value="enrique_s" {{ old('author') == 'enrique_s' ? 'selected' : '' }}>ENRIQUEEE SEBASTIÁ (ICES)</option>
+                                <option value="jaime_c" {{ old('author') == 'jaime_c' ? 'selected' : '' }}>JAIME CAMPOS (ICJC)</option>
+                                <option value="marta_n" {{ old('author') == 'marta_n' ? 'selected' : '' }}>MARTA NAVARRO (ICMN)</option>
+                                <option value="pepe_a" {{ old('author') == 'pepe_a' ? 'selected' : '' }}>PEPE ALCOVER (ICPA)</option>
+                                <option value="oscar_a" {{ old('author') == 'oscar_a' ? 'selected' : '' }}>OSCAR ALONSO (ICOA)</option>
+                            </select>
+                            @error('author') <br>[ERROR]:{{ $message }} @enderror
+                        </div>
+                    
+                        <div class="col-md-4">
+                            <label class="form-label" for="budget_excel">Subir Excel:</label>
+                            @if(session('temp_budget_excel'))
+                                <p class="text-muted mt-2">Archivo ya subido: {{ basename(session('temp_budget_excel')) }}</p>
+                            @endif
+                            <input class="form-control" type="file" id="budget_excel" name="budget_excel" accept=".xlsx, .xls" data-bs-toggle="tooltip" title="Solo se acepta archivos .xls y .xlsx">
+                            @error('budget_excel') <br>[ERROR]:{{ $message }} @enderror
+                        </div>
                     </div>
 
                     <h5 class="mt-5 mb-3">Características</h5>
                     <div class="row mb-3">
-                        <div class="col-md-8">
+                        <div class="col-md-7">
                             <label class="form-label" for="holder">Nombre del Titular:</label>
                             <input class="form-control" type="text" id="holder" name="holder" value="{{ old('holder') }}" data-bs-toggle="tooltip" title="Introduzca el nombre del titular">
                             @error('holder') <br>[ERROR]:{{ $message }} @enderror
                         </div>
 
-                        <div class="col-md-4">
+                        <div class="col-md-5">
                             <label class="form-label" for="cover">Imagen (opcional):</label>
                             <input class="form-control" type="file" id="cover" name="cover" accept="image/*" data-bs-toggle="tooltip" title="Puede añadir una imagen">
                             @error('cover') <br>[ERROR]:{{ $message }} @enderror
@@ -133,7 +149,7 @@
 
                     <div class="mb-3">
                         <label class="form-label" for="budget">Presupuesto Total de la Instalación:</label>
-                        <input class="form-control" step="0.01" type="number" id="budget" name="budget" value="{{ old('budget') }}" data-bs-toggle="tooltip" title="Introduzca la marca">
+                        <input class="form-control" step="0.01" type="number" id="budget" name="budget" value="{{ old('budget') }}" data-bs-toggle="tooltip" title="Introduzca comas solo para los decimales">
                         @error('budget') <br>[ERROR]:{{ $message }} @enderror
                     </div>
 
@@ -142,7 +158,9 @@
                         <select class="form-select" id="type_clasi" name="type_clasi" data-bs-toggle="tooltip" title="Seleccione el tipo de clasificación">
                             <option value="">-- Seleccione --</option>
                             <option value="mojado" {{ old('type_clasi') == 'mojado' ? 'selected' : '' }}>Tipo Mojado</option>
-                            <option value="F+N" {{ old('type_clasi') == 'F+N' ? 'selected' : '' }}>F+N (Monofásica)</option>
+                            <option value="humedo" {{ old('type_clasi') == 'humedo' ? 'selected' : '' }}>Tipo Húmedo</option>
+                            <option value="ambos" {{ old('type_clasi') == 'ambos' ? 'selected' : '' }}>Tipo Mojado y Húmedo</option>
+                            <option value="noclasi" {{ old('type_clasi') == 'noclasi' ? 'selected' : '' }}>No Clasificado</option>
                         </select>
                         @error('type_clasi') <br>[ERROR]:{{ $message }} @enderror
                     </div>
@@ -184,16 +202,17 @@
                         @error('voltage') <br>[ERROR]:{{ $message }} @enderror
                     </div>
                     
-                    <div class="mb-3">
-                        <label class="form-label" for="air_entry">Entrada de Aire en m3/h:</label>
-                        <input class="form-control" step="0.01" type="number" id="air_entry" name="air_entry" value="{{ old('air_entry') }}" data-bs-toggle="tooltip" title="Introduzca la entrada de aire en m3/h">
-                        @error('air_entry') <br>[ERROR]:{{ $message }} @enderror
-                    </div>
-                    
-                    <div class="mb-3">
-                        <label class="form-label" for="air_flow">Entrada de Flujo en m3/minuto:</label>
-                        <input class="form-control" step="0.01" type="number" id="air_flow" name="air_flow" value="{{ old('air_flow') }}" data-bs-toggle="tooltip" title="Introduzca la entrada de aire en m3/minuto">
-                        @error('air_flow') <br>[ERROR]:{{ $message }} @enderror
+                    <div class="row mb-3">
+                        <div class="col-md-4">
+                            <label class="form-label" for="air_entry">Entrada de Aire en m3/h:</label>
+                            <input class="form-control" step="0.01" type="number" id="air_entry" name="air_entry" value="{{ old('air_entry') }}" data-bs-toggle="tooltip" title="Introduzca la entrada de aire en m3/h">
+                            @error('air_entry') <br>[ERROR]:{{ $message }} @enderror
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label" for="air_flow">Entrada de Flujo en m3/minuto:</label>
+                            <input class="form-control" step="0.01" type="number" id="air_flow" name="air_flow" value="{{ old('air_flow') }}" data-bs-toggle="tooltip" title="Introduzca la entrada de aire en m3/minuto">
+                            @error('air_flow') <br>[ERROR]:{{ $message }} @enderror
+                        </div>
                     </div>
                     
                     <div class="row mb-3">
@@ -208,6 +227,12 @@
                             <input class="form-control" step="0.01" type="number" id="factor" name="factor" value="{{ old('factor') }}" data-bs-toggle="tooltip" title="Introduzca el factor de potencia">
                             @error('factor') <br>[ERROR]:{{ $message }} @enderror
                         </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label" for="method">Método de Refrigeración:</label>
+                        <textarea class="form-control" id="method" name="method" rows="3" data-bs-toggle="tooltip" title="Método de refrigeración del grupo electrógeno">El sistema de refrigeración lo conforma un radiador con ventilador soplante y protecciones adecuadas, diseñados para refrigerar el motor en temperaturas ambientes de hasta 50 º C, incluyendo grifo de vaciado, incorporará liquido anticongelante.</textarea>
+                        @error('method') <br>[ERROR]: {{ $message }} @enderror
                     </div>
                     
                     <div class="d-flex justify-content-left">

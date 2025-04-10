@@ -8,9 +8,6 @@ use App\Http\Requests\GroupElectroRequest;
 use Illuminate\Support\Facades\Storage;
 use PhpOffice\PhpWord\TemplateProcessor;
 use PhpOffice\PhpSpreadsheet\IOFactory;
-use PhpOffice\PhpSpreadsheet\Reader\Exception as ReaderException;
-use PhpOffice\PhpSpreadsheet\Reader\Xls;
-use PhpOffice\PhpSpreadsheet\Reader\Xlsx;
 
 class GroupElectroController extends Controller
 {
@@ -37,7 +34,12 @@ class GroupElectroController extends Controller
     {
         $groupElectro = new GroupElectro();
         $groupElectro->name = $request->input('name');
+        $groupElectro->author = $request->input('author');
         $groupElectro->budget_excel = $request->file('budget_excel')->store('excels', 'private'); //Se define donde se va a guardar
+        if ($request->hasFile('budget_excel')) {
+            $tempPath = $request->file('budget_excel')->store('temp');
+            session()->flash('temp_budget_excel', $tempPath);
+        }
         //dd($path); 
         $groupElectro->holder = $request->input('holder');
         $groupElectro->address = $request->input('address');
@@ -61,6 +63,7 @@ class GroupElectroController extends Controller
         $groupElectro->air_flow = $request->input('air_flow');
         $groupElectro->w = $request->input('w');
         $groupElectro->factor = $request->input('factor');
+        $groupElectro->method = $request->input('method');
           
     
         // En caso de que se suba la imagen
@@ -106,6 +109,7 @@ class GroupElectroController extends Controller
     public function update(GroupElectroRequest $request, GroupElectro $groupElectro)
     {
         $groupElectro->name = $request->input('name');
+        $groupElectro->author = $request->input('author');
         $groupElectro->budget_excel = $request->file('budget_excel')->store('excels', 'private');
         $groupElectro->holder = $request->input('holder');
         $groupElectro->address = $request->input('address');
@@ -129,6 +133,7 @@ class GroupElectroController extends Controller
         $groupElectro->air_flow = $request->input('air_flow');
         $groupElectro->w = $request->input('w');
         $groupElectro->factor = $request->input('factor');
+        $groupElectro->method = $request->input('method');
         
         // En caso de que se suba la imagen
         if ($request->hasFile('cover')) {
@@ -186,34 +191,26 @@ class GroupElectroController extends Controller
         if (!file_exists($file)) {
             throw new \Exception("El archivo no existe: $file");
         }
-    
+
         try {
-            // Usa IOFactory para detectar el tipo real del archivo (xls o xlsx)
-            $type = IOFactory::identify($file);
-            $reader = IOFactory::createReader($type);
-            $spreadsheet = $reader->load($file);
+            $spreadsheet = IOFactory::load($file);
+            $sheet = $spreadsheet->getSheetByName('CUADRO GENERAL');
         } catch (\Throwable $e) {
             throw new \Exception("Error al leer el archivo Excel: " . $e->getMessage());
         }
-    
-        $sheet = $spreadsheet->getActiveSheet();
-    
-        return [
-            'u7' => floatval($sheet->getCell('U7')->getValue()),
-            'z7' => floatval($sheet->getCell('Z7')->getValue()),
-            'c9' => floatval($sheet->getCell('C9')->getValue()),
-            'u9' => floatval($sheet->getCell('U9')->getValue()),
-            'z9' => floatval($sheet->getCell('Z9')->getValue()),
-            'c10' => floatval($sheet->getCell('C10')->getValue()),
-            'u10' => floatval($sheet->getCell('U10')->getValue()),
-            'z10' => floatval($sheet->getCell('Z10')->getValue()),
-            'c11' => floatval($sheet->getCell('C11')->getValue()),
-            'u11' => floatval($sheet->getCell('U11')->getValue()),
-            'z11' => floatval($sheet->getCell('Z11')->getValue()),
-            'c12' => floatval($sheet->getCell('C12')->getValue()),
-            'u12' => floatval($sheet->getCell('U12')->getValue()),
-            'z12' => floatval($sheet->getCell('Z12')->getValue()),
-        ];
+
+        $cells = [];
+        $letters = ['C', 'U', 'Z'];
+        $rows = range(7, 12);
+
+        foreach ($letters as $col) {
+            foreach ($rows as $row) {
+                $key = strtolower($col . $row);
+                $cells[$key] = $sheet->getCell("$col$row")->getFormattedValue();
+            }
+        }
+
+        return $cells;
     }
 
     public function convertToWord(GroupElectro $groupElectro)
@@ -245,35 +242,44 @@ class GroupElectroController extends Controller
         $templateProcessor->setValue ('model', $groupElectro->model);
         $templateProcessor->setValue ('air_entry', $groupElectro->air_entry);
         $templateProcessor->setValue ('air_flow', $groupElectro->air_flow);
+        $templateProcessor->setValue ('method', $groupElectro->method);
 
         // Datos del excel
-        $templateProcessor->setValue('u7', number_format($datesExcel['u7'], 2, ',', '.'));
-        $templateProcessor->setValue('z7', number_format($datesExcel['z7'], 2, ',', '.'));
-        $templateProcessor->setValue('c9', number_format($datesExcel['c9'], 2, ',', '.'));
-        $templateProcessor->setValue('u9', number_format($datesExcel['u9'], 2, ',', '.'));
-        $templateProcessor->setValue('z9', number_format($datesExcel['z9'], 2, ',', '.'));
-        $templateProcessor->setValue('c10', number_format($datesExcel['c10'], 2, ',', '.'));
-        $templateProcessor->setValue('u10', number_format($datesExcel['u10'], 2, ',', '.'));
-        $templateProcessor->setValue('z10', number_format($datesExcel['z10'], 2, ',', '.'));
-        $templateProcessor->setValue('c11', number_format($datesExcel['c11'], 2, ',', '.'));
-        $templateProcessor->setValue('u11', number_format($datesExcel['u11'], 2, ',', '.'));
-        $templateProcessor->setValue('z11', number_format($datesExcel['z11'], 2, ',', '.'));
-        $templateProcessor->setValue('c12', number_format($datesExcel['c12'], 2, ',', '.'));
-        $templateProcessor->setValue('u12', number_format($datesExcel['u12'], 2, ',', '.'));
-        $templateProcessor->setValue('z12', number_format($datesExcel['z12'], 2, ',', '.'));
+        foreach ($datesExcel as $key => $value) {
+            $templateProcessor->setValue($key, $value);
+        }
 
-        $tensionText = $groupElectro->tension_type === '3F+N'
-            ? 'trifásica, de 400 V entre fases y 230 V entre fase y neutro.'
-            : 'de 230 V entre fase y neutro.';
-        $templateProcessor->setValue('tension_type', $tensionText);
+        $authors = [
+            'luis_m' => 'ICLM',
+            'enrique_s' => 'ICES',
+            'jaime_c' => 'ICJC',
+            'marta_n' => 'ICMN',
+            'pepe_a' => 'ICPA',
+            'oscar_a' => 'ICOA',
+        ];
+        
+        $authorText = $authors[$groupElectro->author] ?? 'Autor no especificado';
+        $templateProcessor->setValue('author', $authorText);
+
+        $typeClasiText = match ($groupElectro->type_clasi) {
+            'mojado' => 'mojada ya que se trata de una instalación a la intemperie',
+            'humedo' => 'húmeda ya que se encuentra en una zona con presencia de humedad',
+            'ambos' => 'mojada ya que se trata de una instalación a la intemperie y húmeda ya que se encuentra en una zona con presencia de humedad',
+            'noclasi' => 'no clasificada',
+            default => 'no clasificada',
+        };
+        
+        $templateProcessor->setValue('type_clasi', $typeClasiText);
 
         
-        //Terminar de hacer el tipo de clasificacion
-        $tensionText = $groupElectro->type_clasi === 'mojado'
-            ? 'trifásica, de 400 V entre fases y 230 V entre fase y neutro.'
-            : 'de 230 V entre fase y neutro.';
-        $templateProcessor->setValue('type_clasi', $tensionText);
+        //Terminar de hacer el tipo de tensio
+        $tensionText = match($groupElectro->tension_type) {
+            '3F+N' => 'trifásica, de 400 V entre fases y 230 V entre fase y neutro.',
+            'F+N' => 'de 230 V entre fase y neutro.'
+        };
+        $templateProcessor->setValue('tension_type', $tensionText);
 
+        //Tenseión de servicio
         $tensionService = $groupElectro->voltage === '3F+N'
             ? '400/230V'
             : '230V';
@@ -285,8 +291,8 @@ class GroupElectroController extends Controller
             if (file_exists($imagePath)) {
                 $templateProcessor->setImageValue('cover', [
                     'path' => $imagePath,
-                    'widht' => 150,
-                    'heigh' => 150,
+                    'width' => 150,
+                    'height' => 150,
                     'ratio' => true,
                 ]);
             }
@@ -296,8 +302,8 @@ class GroupElectroController extends Controller
             if (file_exists($imagePath)) {
                 $templateProcessor->setImageValue('image_model', [
                     'path' => $imagePath,
-                    'widht' => 400,
-                    'heigh' => 267,
+                    'width' => 440,
+                    'height' => 270,
                     'ratio' => false,
                 ]);
             }
@@ -307,12 +313,30 @@ class GroupElectroController extends Controller
             if (file_exists($imagePath)) {
                 $templateProcessor->setImageValue('image_dimensions', [
                     'path' => $imagePath,
-                    'widht' => 184,
-                    'heigh' => 129,
+                    'width' => 160,
+                    'height' => 110,
                     'ratio' => false,
                 ]);
             }
         }
+
+        //Calculo de Potencia Instalada en KW
+        $poten = floatval($groupElectro->w);
+        $factorP = floatval($groupElectro->factor);
+        $voltaje = 400;
+        $intensidad = $poten / ($voltaje * sqrt(3) * $factorP);
+        //Le damos un formato al resultado de la I
+        $format = number_format($intensidad, 2, ',', '.'); // Ej: 87,78
+        $templateProcessor->setValue('w', $groupElectro->w);
+        $templateProcessor->setValue('factor', $groupElectro->factor);
+        $templateProcessor->setValue('resul', $format);
+
+        //Fecha actual para el documento
+        $meses = [ 1 => 'Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
+        $mes = $meses[date('n')];
+        $anyo = date('Y');
+        $formatdate = ucfirst($mes). ' de ' .$anyo;
+        $templateProcessor->setValue('fecha', $formatdate);
 
         $templateProcessor->saveAs($outputPath);
 

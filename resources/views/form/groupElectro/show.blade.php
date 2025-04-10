@@ -147,6 +147,11 @@
                 <strong>Factor de Potencia del Grupo:</strong>
                 <div class="formatted-text">{!! nl2br(e($groupElectro->factor)) !!}</div>
             </li>
+
+            <li class="list-group-item">
+                <strong>Método de Refrigeración:</strong>
+                <div class="formatted-text">{!! nl2br(e($groupElectro->method)) !!}</div>
+            </li>
         </ul>
         
         <!-- Botones de acciones -->
