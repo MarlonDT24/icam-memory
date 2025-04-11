@@ -36,7 +36,7 @@
             CKEDITOR.replaceAll('text-editor'); // Aplica CKEditor a todos los textareas con la clase text-editor
         });
     </script>
-    <script src="{{ asset('js/app.js') }}"></script>
+    <script src="{{ asset('js/compatibility.js') }}"></script>
 </body>
 
 </html>
