@@ -18,7 +18,7 @@
         </header>
 
         <!-- Selector de tipo de memoria -->
-        <h2 class="mt-5 text-center">Seleccione el tipo de memoria:</h2>
+        <h2 class="mt-5 text-center" id="tipo-memoria">Seleccione el tipo de memoria:</h2>
         <section class="py-4 mt-3">
             <div class="row text-center mb-5">
                 <div class="col-md-4 mb-3">
