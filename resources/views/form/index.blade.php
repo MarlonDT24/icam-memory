@@ -39,10 +39,49 @@
             @if ($forms->isEmpty())
                 <p class="text-center text-muted">No existen memorias de compatibilidad para mostrar.</p>
             @else
+                <div class="position-relative">
+                    <button class="btn btn-outline-secondary position-absolute top-50 start-0 translate-middle-y z-1" id="prevBtn" style="z-index: 5;">&#10094;</button>
+                    <div class="d-flex overflow-auto px-5" id="cardCarousel">
+                        @foreach ($forms as $form)
+                            <div class="flex-shrink-0 me-4" style="width: 180px;">
+                                <div class="card card-hover mt-3">
+                                    <img class="card-img-top" src="{{ asset('img/document.jpg') }}" alt="Imagen del documento">
+                                    <div class="card-body p-4 text-center">
+                                        <h5 class="fw-bolder">
+                                            <a href="{{ route('form.show', $form->id) }}" class="text-decoration-none">
+                                                {{ $form->name }}
+                                            </a>
+                                        </h5>
+                                        <h6 class="fw-bolder">Fecha de Creación</h6>
+                                        <p class="text-muted">{{ $form->created_at->format('d/m/Y') }}</p>
+                                    </div>
+                                    <div class="card-footer p-4 pt-0 border-top-0 bg-transparent d-flex flex-column align-items-center gap-2">
+                                        <a class="btn btn-success mt-4" href="{{ route('form.show', $form->id) }}">Ver Más Detalles</a>
+                                        <a class="btn btn-primary" href="{{ route('form.edit', $form->id) }}">Editar</a>
+                                        <form action="{{ route('form.destroy', $form->id) }}" method="post">
+                                            @csrf
+                                            @method('delete')
+                                            <input type="submit" value="Eliminar" class="btn btn-secondary btn-outline-dark">
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        @endforeach
+                    </div>
+                    <button class="btn btn-outline-secondary position-absolute top-50 end-0 translate-middle-y z-1" id="nextBtn" style="z-index: 5;">&#10095;</button>
+                </div>
+            @endif
+        </section>
+
+        <section class="py-5">
+            <h2 class="text-center mb-4">Historial de Memorias de Compatibilidad</h2>
+            @if ($forms->isEmpty())
+                <p class="text-center text-muted">No existen memorias de compatibilidad para mostrar.</p>
+            @else
                 <div class="row gx-4 gx-lg-5 row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-xl-5 justify-content-center">
                     @foreach ($forms as $form)
                         <div class="col mb-5">
-                            <div class="card card-hover">
+                            <div class="card card-hover mt-3">
                                 <img class="card-img-top" src="{{ asset('img/document.jpg') }}" alt="Imagen del documento">
                                 <div class="card-body p-4 text-center">
                                     <h5 class="fw-bolder">
@@ -54,7 +93,7 @@
                                     <p class="text-muted">{{ $form->created_at->format('d/m/Y') }}</p>
                                 </div>
                                 <div class="card-footer p-4 pt-0 border-top-0 bg-transparent d-flex flex-column align-items-center gap-2">
-                                    <a class="btn btn-success" href="{{ route('form.show', $form->id) }}">Ver Más Detalles</a>
+                                    <a class="btn btn-success mt-4" href="{{ route('form.show', $form->id) }}">Ver Más Detalles</a>
                                     <a class="btn btn-primary" href="{{ route('form.edit', $form->id) }}">Editar</a>
                                     <form action="{{ route('form.destroy', $form->id) }}" method="post">
                                         @csrf

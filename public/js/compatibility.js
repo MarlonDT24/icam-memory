@@ -144,4 +144,25 @@ document.addEventListener("DOMContentLoaded", () => {
             card.classList.add("animate__animated", "animate__fadeInUp");
         }, index * 150);
     });
+
+    //Flechas para los historiales
+    const carousel = document.getElementById("cardCarousel");
+        const prevBtn = document.getElementById("prevBtn");
+        const nextBtn = document.getElementById("nextBtn");
+
+        function updateButtons() {
+            prevBtn.style.display = carousel.scrollLeft <= 0 ? "none" : "block";
+            nextBtn.style.display = carousel.scrollLeft + carousel.offsetWidth >= carousel.scrollWidth ? "none" : "block";
+        }
+
+        prevBtn.addEventListener("click", () => {
+            carousel.scrollBy({ left: -300, behavior: "smooth" });
+        });
+
+        nextBtn.addEventListener("click", () => {
+            carousel.scrollBy({ left: 300, behavior: "smooth" });
+        });
+
+        carousel.addEventListener("scroll", updateButtons);
+        updateButtons();
 });
