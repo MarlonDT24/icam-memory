@@ -103,15 +103,16 @@ body {
 }
 
 /* Efecto hover de las card del form.create y form.edit*/
-.card {
+.memory-card {
     transition: transform 0.28s ease, box-shadow 0.3s ease;
     opacity: 0; /*Las cards se ocultan al principio y que luego se vea la animación correctamente*/
     min-height: 300px;
     max-width: 680px;
     width: 120%;
+    margin-bottom: 20px;
 }
 
-.card:hover {
+.memory-card:hover {
     transform: scale(1.03);
     box-shadow: 0 8px 20px rgba(221, 15, 15, 0.452);
 }

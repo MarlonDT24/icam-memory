@@ -40,11 +40,14 @@
                 <p class="text-center text-muted">No existen memorias de compatibilidad para mostrar.</p>
             @else
                 <div class="position-relative">
-                    <button class="btn btn-outline-secondary position-absolute top-50 start-0 translate-middle-y z-1" id="prevBtn" style="z-index: 5;">&#10094;</button>
-                    <div class="d-flex overflow-auto px-5" id="cardCarousel">
+                    <!-- Botón izquierdo -->
+                    <button class="btn btn-outline-secondary position-absolute top-50 start-0 translate-middle-y" id="prevBtn" style="margin-left: -45px;">&#10094;</button>
+        
+                    <!-- Carrusel de cards con separación -->
+                    <div class="d-flex overflow-auto gap-4 px-5 py-3" id="cardCarousel">
                         @foreach ($forms as $form)
-                            <div class="flex-shrink-0 me-4" style="width: 180px;">
-                                <div class="card card-hover mt-3">
+                            <div class="flex-shrink-0" style="width: 200px;">
+                                <div class="card memory-card">
                                     <img class="card-img-top" src="{{ asset('img/document.jpg') }}" alt="Imagen del documento">
                                     <div class="card-body p-4 text-center">
                                         <h5 class="fw-bolder">
@@ -68,10 +71,13 @@
                             </div>
                         @endforeach
                     </div>
-                    <button class="btn btn-outline-secondary position-absolute top-50 end-0 translate-middle-y z-1" id="nextBtn" style="z-index: 5;">&#10095;</button>
+        
+                    <!-- Botón derecho -->
+                    <button class="btn btn-outline-secondary position-absolute top-50 end-0 translate-middle-y" id="nextBtn" style="margin-right: -45px;">&#10095;</button>
                 </div>
             @endif
         </section>
+        
 
         <section class="py-5">
             <h2 class="text-center mb-4">Historial de Memorias de Compatibilidad</h2>
