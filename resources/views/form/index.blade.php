@@ -41,12 +41,12 @@
             @else
                 <div class="position-relative">
                     <!-- Botón izquierdo -->
-                    <button class="btn btn-outline-secondary position-absolute top-50 start-0 translate-middle-y" id="prevBtn" style="margin-left: -45px;">&#10094;</button>
+                    <button class="btn btn-outline-danger position-absolute top-50 start-0 translate-middle-y" id="prevBtn" style="margin-left: -45px;">&#10094;</button>
         
                     <!-- Carrusel de cards con separación -->
                     <div class="d-flex overflow-auto gap-4 px-5 py-3" id="cardCarousel">
                         @foreach ($forms as $form)
-                            <div class="flex-shrink-0" style="width: 200px;">
+                            <div class="flex-shrink-0 me-5" style="width: 200px;">
                                 <div class="card memory-card">
                                     <img class="card-img-top" src="{{ asset('img/document.jpg') }}" alt="Imagen del documento">
                                     <div class="card-body p-4 text-center">
@@ -73,43 +73,7 @@
                     </div>
         
                     <!-- Botón derecho -->
-                    <button class="btn btn-outline-secondary position-absolute top-50 end-0 translate-middle-y" id="nextBtn" style="margin-right: -45px;">&#10095;</button>
-                </div>
-            @endif
-        </section>
-        
-
-        <section class="py-5">
-            <h2 class="text-center mb-4">Historial de Memorias de Compatibilidad</h2>
-            @if ($forms->isEmpty())
-                <p class="text-center text-muted">No existen memorias de compatibilidad para mostrar.</p>
-            @else
-                <div class="row gx-4 gx-lg-5 row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-xl-5 justify-content-center">
-                    @foreach ($forms as $form)
-                        <div class="col mb-5">
-                            <div class="card card-hover mt-3">
-                                <img class="card-img-top" src="{{ asset('img/document.jpg') }}" alt="Imagen del documento">
-                                <div class="card-body p-4 text-center">
-                                    <h5 class="fw-bolder">
-                                        <a href="{{ route('form.show', $form->id) }}" class="text-decoration-none">
-                                            {{ $form->name }}
-                                        </a>
-                                    </h5>
-                                    <h6 class="fw-bolder">Fecha de Creación</h6>
-                                    <p class="text-muted">{{ $form->created_at->format('d/m/Y') }}</p>
-                                </div>
-                                <div class="card-footer p-4 pt-0 border-top-0 bg-transparent d-flex flex-column align-items-center gap-2">
-                                    <a class="btn btn-success mt-4" href="{{ route('form.show', $form->id) }}">Ver Más Detalles</a>
-                                    <a class="btn btn-primary" href="{{ route('form.edit', $form->id) }}">Editar</a>
-                                    <form action="{{ route('form.destroy', $form->id) }}" method="post">
-                                        @csrf
-                                        @method('delete')
-                                        <input type="submit" value="Eliminar" class="btn btn-secondary btn-outline-dark">
-                                    </form>
-                                </div>
-                            </div>
-                        </div>
-                    @endforeach
+                    <button class="btn btn-outline-danger position-absolute top-50 end-0 translate-middle-y" id="nextBtn" style="margin-right: -45px;">&#10095;</button>
                 </div>
             @endif
         </section>
@@ -118,34 +82,43 @@
         <section class="py-5">
             <h2 class="text-center mb-4">Historial de Memorias de Baja Tensión</h2>
             @if ($forms->isEmpty())
-                <p class="text-center text-muted">No existen memorias de baja tensión para mostrar.</p>
+                <p class="text-center text-muted">No existen memorias de Baja Tensión para mostrar.</p>
             @else
-                <div class="row gx-4 gx-lg-5 row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-xl-5 justify-content-center">
-                    @foreach ($forms as $form)
-                        <div class="col mb-5">
-                            <div class="card card-hover">
-                                <img class="card-img-top" src="{{ asset('img/document.jpg') }}" alt="Imagen del documento">
-                                <div class="card-body p-4 text-center">
-                                    <h5 class="fw-bolder">
-                                        <a href="{{ route('form.show', $form->id) }}" class="text-decoration-none">
-                                            {{ $form->name }}
-                                        </a>
-                                    </h5>
-                                    <h6 class="fw-bolder">Fecha de Creación</h6>
-                                    <p class="text-muted">{{ $form->created_at->format('d/m/Y') }}</p>
-                                </div>
-                                <div class="card-footer p-4 pt-0 border-top-0 bg-transparent d-flex flex-column align-items-center gap-2">
-                                    <a class="btn btn-success" href="{{ route('form.show', $form->id) }}">Ver Más Detalles</a>
-                                    <a class="btn btn-primary" href="{{ route('form.edit', $form->id) }}">Editar</a>
-                                    <form action="{{ route('form.destroy', $form->id) }}" method="post">
-                                        @csrf
-                                        @method('delete')
-                                        <input type="submit" value="Eliminar" class="btn btn-secondary btn-outline-dark">
-                                    </form>
+                <div class="position-relative">
+                    <!-- Botón izquierdo -->
+                    <button class="btn btn-outline-danger position-absolute top-50 start-0 translate-middle-y" id="prevBtn" style="margin-left: -45px;">&#10094;</button>
+        
+                    <!-- Carrusel de cards con separación -->
+                    <div class="d-flex overflow-auto gap-4 px-5 py-3" id="cardCarousel">
+                        @foreach ($forms as $form)
+                            <div class="flex-shrink-0 me-5" style="width: 200px;">
+                                <div class="card memory-card">
+                                    <img class="card-img-top" src="{{ asset('img/document.jpg') }}" alt="Imagen del documento">
+                                    <div class="card-body p-4 text-center">
+                                        <h5 class="fw-bolder">
+                                            <a href="{{ route('form.show', $form->id) }}" class="text-decoration-none">
+                                                {{ $form->name }}
+                                            </a>
+                                        </h5>
+                                        <h6 class="fw-bolder">Fecha de Creación</h6>
+                                        <p class="text-muted">{{ $form->created_at->format('d/m/Y') }}</p>
+                                    </div>
+                                    <div class="card-footer p-4 pt-0 border-top-0 bg-transparent d-flex flex-column align-items-center gap-2">
+                                        <a class="btn btn-success mt-4" href="{{ route('form.show', $form->id) }}">Ver Más Detalles</a>
+                                        <a class="btn btn-primary" href="{{ route('form.edit', $form->id) }}">Editar</a>
+                                        <form action="{{ route('form.destroy', $form->id) }}" method="post">
+                                            @csrf
+                                            @method('delete')
+                                            <input type="submit" value="Eliminar" class="btn btn-secondary btn-outline-dark">
+                                        </form>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    @endforeach
+                        @endforeach
+                    </div>
+        
+                    <!-- Botón derecho -->
+                    <button class="btn btn-outline-danger position-absolute top-50 end-0 translate-middle-y" id="nextBtn" style="margin-right: -45px;">&#10095;</button>
                 </div>
             @endif
         </section>
@@ -154,34 +127,43 @@
         <section class="py-5">
             <h2 class="text-center mb-4">Historial de Memorias de Grupo Electrógeno</h2>
             @if ($groupElectro->isEmpty())
-                <p class="text-center text-muted">No existen memorias de grupo electrógeno para mostrar.</p>
+                <p class="text-center text-muted">No existen memorias de Grupo Electrógeno para mostrar.</p>
             @else
-                <div class="row gx-4 gx-lg-5 row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-xl-5 justify-content-center">
-                    @foreach ($groupElectro as $group)
-                        <div class="col mb-5">
-                            <div class="card card-hover">
-                                <img class="card-img-top" src="{{ asset('img/document.jpg') }}" alt="Imagen del documento">
-                                <div class="card-body p-4 text-center">
-                                    <h5 class="fw-bolder">
-                                        <a href="{{ route('groupElectro.show', $group->id) }}" class="text-decoration-none">
-                                            {{ $group->name }}
-                                        </a>
-                                    </h5>
-                                    <h6 class="fw-bolder">Fecha de Creación</h6>
-                                    <p class="text-muted">{{ $group->created_at->format('d/m/Y') }}</p>
-                                </div>
-                                <div class="card-footer p-4 pt-0 border-top-0 bg-transparent d-flex flex-column align-items-center gap-2">
-                                    <a class="btn btn-success" href="{{ route('groupElectro.show', $group->id) }}">Ver Más Detalles</a>
-                                    <a class="btn btn-primary" href="{{ route('groupElectro.edit', $group->id) }}">Editar</a>
-                                    <form action="{{ route('groupElectro.destroy', $group->id) }}" method="post">
-                                        @csrf
-                                        @method('delete')
-                                        <input type="submit" value="Eliminar" class="btn btn-secondary btn-outline-dark">
-                                    </form>
+                <div class="position-relative">
+                    <!-- Botón izquierdo -->
+                    <button class="btn btn-outline-danger position-absolute top-50 start-0 translate-middle-y" id="prevBtn" style="margin-left: -45px;">&#10094;</button>
+        
+                    <!-- Carrusel de cards con separación -->
+                    <div class="d-flex overflow-auto gap-4 px-5 py-3" id="cardCarousel">
+                        @foreach ($groupElectro as $group)
+                            <div class="flex-shrink-0 me-5" style="width: 200px;">
+                                <div class="card memory-card">
+                                    <img class="card-img-top" src="{{ asset('img/document.jpg') }}" alt="Imagen del documento">
+                                    <div class="card-body p-4 text-center">
+                                        <h5 class="fw-bolder">
+                                            <a href="{{ route('groupElectro.show', $group->id) }}" class="text-decoration-none">
+                                                {{ $group->name }}
+                                            </a>
+                                        </h5>
+                                        <h6 class="fw-bolder">Fecha de Creación</h6>
+                                        <p class="text-muted">{{ $group->created_at->format('d/m/Y') }}</p>
+                                    </div>
+                                    <div class="card-footer p-4 pt-0 border-top-0 bg-transparent d-flex flex-column align-items-center gap-2">
+                                        <a class="btn btn-success mt-4" href="{{ route('groupElectro.show', $group->id) }}">Ver Más Detalles</a>
+                                        <a class="btn btn-primary" href="{{ route('groupElectro.edit', $group->id) }}">Editar</a>
+                                        <form action="{{ route('groupElectro.destroy', $group->id) }}" method="post">
+                                            @csrf
+                                            @method('delete')
+                                            <input type="submit" value="Eliminar" class="btn btn-secondary btn-outline-dark">
+                                        </form>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    @endforeach
+                        @endforeach
+                    </div>
+        
+                    <!-- Botón derecho -->
+                    <button class="btn btn-outline-danger position-absolute top-50 end-0 translate-middle-y" id="nextBtn" style="margin-right: -45px;">&#10095;</button>
                 </div>
             @endif
         </section>
