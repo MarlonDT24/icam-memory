@@ -34,17 +34,17 @@
         </section>
 
         <!-- Historial de Compatibilidad -->
-        <section class="py-5">
+        <section class="py-5" id="hist-comp">
             <h2 class="text-center mb-4">Historial de Memorias de Compatibilidad</h2>
             @if ($forms->isEmpty())
                 <p class="text-center text-muted">No existen memorias de compatibilidad para mostrar.</p>
             @else
-                <div class="position-relative">
+                <div class="position-relative memory-carousel">
                     <!-- Botón izquierdo -->
-                    <button class="btn btn-outline-danger position-absolute top-50 start-0 translate-middle-y" id="prevBtn" style="margin-left: -45px;">&#10094;</button>
+                    <button class="btn btn-outline-danger position-absolute top-50 start-0 translate-middle-y prev-btn" style="margin-left: -45px;">&#10094;</button>
         
                     <!-- Carrusel de cards con separación -->
-                    <div class="d-flex overflow-auto gap-4 px-5 py-3" id="cardCarousel">
+                    <div class="d-flex overflow-auto gap-4 px-5 py-3 carousel-content">
                         @foreach ($forms as $form)
                             <div class="flex-shrink-0 me-5" style="width: 200px;">
                                 <div class="card memory-card">
@@ -73,23 +73,23 @@
                     </div>
         
                     <!-- Botón derecho -->
-                    <button class="btn btn-outline-danger position-absolute top-50 end-0 translate-middle-y" id="nextBtn" style="margin-right: -45px;">&#10095;</button>
+                    <button class="btn btn-outline-danger position-absolute top-50 end-0 translate-middle-y next-btn" style="margin-right: -45px;">&#10095;</button>
                 </div>
             @endif
         </section>
 
         <!-- Historial de Baja Tensión -->
-        <section class="py-5">
+        <section class="py-5" id="hist-volt">
             <h2 class="text-center mb-4">Historial de Memorias de Baja Tensión</h2>
             @if ($forms->isEmpty())
                 <p class="text-center text-muted">No existen memorias de Baja Tensión para mostrar.</p>
             @else
-                <div class="position-relative">
+                <div class="position-relative memory-carousel">
                     <!-- Botón izquierdo -->
-                    <button class="btn btn-outline-danger position-absolute top-50 start-0 translate-middle-y" id="prevBtn" style="margin-left: -45px;">&#10094;</button>
+                    <button class="btn btn-outline-danger position-absolute top-50 start-0 translate-middle-y prev-btn" style="margin-left: -45px;">&#10094;</button>
         
                     <!-- Carrusel de cards con separación -->
-                    <div class="d-flex overflow-auto gap-4 px-5 py-3" id="cardCarousel">
+                    <div class="d-flex overflow-auto gap-4 px-5 py-3 carousel-content">
                         @foreach ($forms as $form)
                             <div class="flex-shrink-0 me-5" style="width: 200px;">
                                 <div class="card memory-card">
@@ -118,23 +118,23 @@
                     </div>
         
                     <!-- Botón derecho -->
-                    <button class="btn btn-outline-danger position-absolute top-50 end-0 translate-middle-y" id="nextBtn" style="margin-right: -45px;">&#10095;</button>
+                    <button class="btn btn-outline-danger position-absolute top-50 end-0 translate-middle-y next-btn" style="margin-right: -45px;">&#10095;</button>
                 </div>
             @endif
         </section>
 
         <!-- Historial de Grupo Electrógeno -->
-        <section class="py-5">
+        <section class="py-5" id="hist-group">
             <h2 class="text-center mb-4">Historial de Memorias de Grupo Electrógeno</h2>
             @if ($groupElectro->isEmpty())
                 <p class="text-center text-muted">No existen memorias de Grupo Electrógeno para mostrar.</p>
             @else
-                <div class="position-relative">
+                <div class="position-relative memory-carousel">
                     <!-- Botón izquierdo -->
-                    <button class="btn btn-outline-danger position-absolute top-50 start-0 translate-middle-y" id="prevBtn" style="margin-left: -45px;">&#10094;</button>
+                    <button class="btn btn-outline-danger position-absolute top-50 start-0 translate-middle-y prev-btn" style="margin-left: -45px;">&#10094;</button>
         
                     <!-- Carrusel de cards con separación -->
-                    <div class="d-flex overflow-auto gap-4 px-5 py-3" id="cardCarousel">
+                    <div class="d-flex overflow-auto gap-4 px-5 py-3 carousel-content">
                         @foreach ($groupElectro as $group)
                             <div class="flex-shrink-0 me-5" style="width: 200px;">
                                 <div class="card memory-card">
@@ -163,7 +163,7 @@
                     </div>
         
                     <!-- Botón derecho -->
-                    <button class="btn btn-outline-danger position-absolute top-50 end-0 translate-middle-y" id="nextBtn" style="margin-right: -45px;">&#10095;</button>
+                    <button class="btn btn-outline-danger position-absolute top-50 end-0 translate-middle-y next-btn" style="margin-right: -45px;">&#10095;</button>
                 </div>
             @endif
         </section>

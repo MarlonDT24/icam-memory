@@ -142,27 +142,30 @@ document.addEventListener("DOMContentLoaded", () => {
         setTimeout(() => {
             //Hace un efecto cascada en cada card de las memorias
             card.classList.add("animate__animated", "animate__fadeInUp");
-        }, index * 150);
+        }, index * 70);
     });
 
     //Flechas para los historiales
-    const carousel = document.getElementById("cardCarousel");
-        const prevBtn = document.getElementById("prevBtn");
-        const nextBtn = document.getElementById("nextBtn");
+    document.querySelectorAll(".memory-carousel").forEach((carouselWrapper) => {
+        const carousel = carouselWrapper.querySelector(".carousel-content");
+        const prevBtn = carouselWrapper.querySelector(".prev-btn");
+        const nextBtn = carouselWrapper.querySelector(".next-btn");
 
         function updateButtons() {
             prevBtn.style.display = carousel.scrollLeft <= 0 ? "none" : "block";
             nextBtn.style.display = carousel.scrollLeft + carousel.offsetWidth >= carousel.scrollWidth ? "none" : "block";
         }
-
         prevBtn.addEventListener("click", () => {
             carousel.scrollBy({ left: -300, behavior: "smooth" });
         });
-
+    
         nextBtn.addEventListener("click", () => {
             carousel.scrollBy({ left: 300, behavior: "smooth" });
         });
-
+    
         carousel.addEventListener("scroll", updateButtons);
         updateButtons();
+    });
+
+
 });

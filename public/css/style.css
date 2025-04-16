@@ -1,12 +1,28 @@
 body {
     padding-top: 80px; /* Ajusta según altura real del navbar */
 }
-
+html {
+    scroll-behavior: smooth;
+}
 /*Texto formateado para el form.show*/
 .formatted-text {
     white-space: pre-line;
     margin-top: 0.5rem;
     line-height: 1.6;
+}
+[data-bs-theme="dark"] .formatted-text {
+    color: #ddd;
+}
+[data-bs-theme="dark"] .list-group-item {
+    background-color: #1e1e1e;
+    color: #e0e0e0;
+    border-color: #333;
+}
+
+/*Corrige el espacio que cubre el nav fijo que no se puede visualizar bien*/
+#tipo-memoria,
+section[id^="hist-"] {
+    scroll-margin-top: 90px; /* Ajusta a la altura exacta de tu navbar */
 }
 
 /*CSS para el boton de elección de tema*/
@@ -111,11 +127,11 @@ body {
     width: 120%;
     margin-bottom: 20px;
 }
-
 .memory-card:hover {
     transform: scale(1.03);
     box-shadow: 0 8px 20px rgba(221, 15, 15, 0.452);
 }
+
 /* Mostrar dropdown en hover */
 .nav-item.dropdown:hover .dropdown-menu {
     display: block;

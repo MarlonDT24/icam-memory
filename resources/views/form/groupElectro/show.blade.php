@@ -6,13 +6,13 @@
 <div class="container py-4">
     <div class="card shadow-sm">
         <div class="card-header text-center bg-primary text-white justify-content-between align-items-center">
-            <h2 class="mb-3">MEMORIA: {{ $groupElectro->name }}</h2>
+            <h2 class="mb-3 mt-2">MEMORIA: {{ $groupElectro->name }}</h2>
         </div>
         
         <div class="card-body">
-
+            <!-- Características -->
             <ul class="list-group mb-4">
-                <h5 class="mt-2">Caracterísicas</h5>
+                <h5 class="mt-4 border-bottom pb-2">Caracterísicas</h5>
                 <li class="list-group-item">
                 <strong class="d-block mb-2">Nombre del Titular:</strong>
                 <div class="d-flex flex-column flex-md-row align-items-start justify-content-between gap-3">

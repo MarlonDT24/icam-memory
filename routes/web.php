@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\FormController;
 use App\Http\Controllers\GroupElectroController;
+use App\Http\Controllers\LoginController;
 use App\Http\Controllers\LowVoltageController;
 
 // Pagina principal para todas las memorias
@@ -36,3 +37,10 @@ Route::resource('lowVoltage', lowVoltageController::class)->names('lowVoltage');
     Route::put('/{form}', [LowVoltageController::class, 'update'])->name('update');
     Route::delete('/{form}', [LowVoltageController::class, 'destroy'])->name('destroy');
 }); */
+
+// Rutas de signup y login
+Route::get('signup', [LoginController::class, 'signupForm'])->name('signupForm');
+Route::post('signup', [LoginController::class, 'signup'])->name('signup');
+Route::get('login', [LoginController::class, 'loginForm'])->name('loginForm');
+Route::post('login', [LoginController::class, 'login'])->name('login');
+Route::get('logout', [LoginController::class, 'logout'])->name('logout');
