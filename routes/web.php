@@ -7,15 +7,15 @@ use App\Http\Controllers\LoginController;
 use App\Http\Controllers\LowVoltageController;
 
 // Pagina principal para todas las memorias
-Route::get('/', [FormController::class, 'index'])->name('principal');
+Route::get('/', [FormController::class, 'index'])->name('principal')->middleware('auth');
 
 // Se usa el FormController para las vistas de Compatibilidad
-Route::resource('form', FormController::class)->names('form');
-Route::get('/form/{form}/word', [FormController::class, 'convertToWord'])->name('form.convertToWord');
+Route::resource('form', FormController::class)->names('form')->middleware('auth');
+Route::get('/form/{form}/word', [FormController::class, 'convertToWord'])->name('form.convertToWord')->middleware('auth');
 
 // Memorias para el Grupo Electrogeno
-Route::resource('groupElectro', GroupElectroController::class)->names('groupElectro');
-Route::get('/groupElectro/{groupElectro}/word', [GroupElectroController::class, 'convertToWord'])->name('groupElectro.convertToWord');
+Route::resource('groupElectro', GroupElectroController::class)->names('groupElectro')->middleware('auth');
+Route::get('/groupElectro/{groupElectro}/word', [GroupElectroController::class, 'convertToWord'])->name('groupElectro.convertToWord')->middleware('auth');
 
 /* Route::prefix('grupo-electrogeno')->name('groupElectro.')->group(function () {
     Route::get('/crear', [GroupElectroController::class, 'create'])->name('create');
@@ -27,7 +27,7 @@ Route::get('/groupElectro/{groupElectro}/word', [GroupElectroController::class, 
 }); */
 
 // Memorias para Baja Tensión
-Route::resource('lowVoltage', lowVoltageController::class)->names('lowVoltage');
+Route::resource('lowVoltage', lowVoltageController::class)->names('lowVoltage')->middleware('auth');
 
 /* Route::prefix('baja-tension')->name('lowVoltage.')->group(function () {
     Route::get('/crear', [LowVoltageController::class, 'create'])->name('create');
@@ -39,8 +39,6 @@ Route::resource('lowVoltage', lowVoltageController::class)->names('lowVoltage');
 }); */
 
 // Rutas de signup y login
-Route::get('signup', [LoginController::class, 'signupForm'])->name('signupForm');
-Route::post('signup', [LoginController::class, 'signup'])->name('signup');
 Route::get('login', [LoginController::class, 'loginForm'])->name('loginForm');
 Route::post('login', [LoginController::class, 'login'])->name('login');
 Route::get('logout', [LoginController::class, 'logout'])->name('logout');

@@ -14,7 +14,7 @@ use Illuminate\Contracts\View\View;
 
 class LoginController extends Controller
 {
-    public function signupForm(): View
+    /* public function signupForm(): View
     {
         return view('auth.signup');
     }
@@ -29,13 +29,11 @@ class LoginController extends Controller
         Auth::login($user);
 
         return redirect()->route('principal');
-    }
+    } */
 
     public function loginForm(): View|RedirectResponse
     {
-        if (Auth::viaRemember()) {
-            return 'Bienvenido de nuevo';
-        } else if (Auth::check()) {
+        if (Auth::viaRemember() || Auth::check()) {
             return redirect()->route('principal');
         } else {
             return view('auth.login');
@@ -44,15 +42,17 @@ class LoginController extends Controller
 
     public function login(Request $request): View|RedirectResponse
     {
-        $credentials = $request->only('username','password');
+        $credentials = $request->only('email', 'password');
+        $rememberLogin = ($request->get('remember')) ? true : false;
 
-        if(Auth::guard('web')->attempt($credentials)) {
+        if(Auth::guard('web')->attempt($credentials, $rememberLogin)) {
             $request->session()->regenerate();
             return redirect()->route('principal');
         } else {
             $error = 'Error al acceder a la aplicación';
             return view('auth.login', compact('error'));
         }
+
         /* /* $credentials = $request->validate([
             'username' => 'required|email',
             'password' => 'required',
