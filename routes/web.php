@@ -41,4 +41,4 @@ Route::resource('lowVoltage', lowVoltageController::class)->names('lowVoltage')-
 // Rutas de signup y login
 Route::get('login', [LoginController::class, 'loginForm'])->name('loginForm');
 Route::post('login', [LoginController::class, 'login'])->name('login');
-Route::get('logout', [LoginController::class, 'logout'])->name('logout');
+Route::post('logout', [LoginController::class, 'logout'])->name('logout');

@@ -33,7 +33,12 @@
                         
                         <div class="mb-3">
                             <label for="password" class="form-label">Contraseña:</label>
-                            <input type="password" name="password" id="password" class="form-control">
+                            <div class="input-group">
+                                <input type="password" name="password" id="password" class="form-control">
+                                <button type="button" class="btn btn-outline-secondary" id="togglePassword" tabindex="-1">
+                                    <i class="bi bi-eye" id="toggleIcon"></i>
+                                </button>
+                            </div>
                         </div>
                 
                         <div class="mb-3 form-check">

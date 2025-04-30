@@ -19,7 +19,10 @@
                 </div>
                 <span class="icon moon">🌙</span>
             </div>
-            <button class=""
+            <form id="logout-form" action="{{ route('logout') }}" method="post" class="d-inline">
+                @csrf
+                <button type="button" id="logoutButton" class="btn btn-outline-light ms-3">Cerrar Sesión</button>
+            </form>
         </div>
     </nav>
 </header>

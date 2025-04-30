@@ -74,6 +74,11 @@ document.addEventListener("DOMContentLoaded", () => {
             const value = input.value.trim();
             const id = input.id;
 
+            // No aplicar validaciones al login
+            if (id === "email" || id === "password") {
+                return; // no hacemos nada para estos campos
+            }
+
             let isValid = false;
 
             // Función para validar hasta 2 decimales
@@ -124,7 +129,10 @@ document.addEventListener("DOMContentLoaded", () => {
                 case "w":
                 case "factor":
                     const parsed = parseFloat(value);
-                    isValid = !isNaN(parsed) && parsed >= 0 && hasMaxTwoDecimals(value);
+                    isValid =
+                        !isNaN(parsed) &&
+                        parsed >= 0 &&
+                        hasMaxTwoDecimals(value);
                     break;
                 default:
                     isValid = input.checkValidity();
@@ -153,19 +161,52 @@ document.addEventListener("DOMContentLoaded", () => {
 
         function updateButtons() {
             prevBtn.style.display = carousel.scrollLeft <= 0 ? "none" : "block";
-            nextBtn.style.display = carousel.scrollLeft + carousel.offsetWidth >= carousel.scrollWidth ? "none" : "block";
+            nextBtn.style.display =
+                carousel.scrollLeft + carousel.offsetWidth >=
+                carousel.scrollWidth
+                    ? "none"
+                    : "block";
         }
         prevBtn.addEventListener("click", () => {
             carousel.scrollBy({ left: -300, behavior: "smooth" });
         });
-    
+
         nextBtn.addEventListener("click", () => {
             carousel.scrollBy({ left: 300, behavior: "smooth" });
         });
-    
+
         carousel.addEventListener("scroll", updateButtons);
         updateButtons();
     });
 
+    //Boton de cerrar sesion
+    const logoutButton = document.getElementById("logoutButton");
+    if (logoutButton) {
+        logoutButton.addEventListener("click", () => {
+            if (confirm("¿Desea cerrar sesión?")) {
+                document.getElementById("logout-form").submit();
+            }
+        });
+    }
 
+    //Boton de cerrar sesion
+    const togglePassword = document.getElementById("togglePassword");
+    const passwordInput = document.getElementById("password");
+    const toggleIcon = document.getElementById("toggleIcon");
+
+    togglePassword.addEventListener("click", function () {
+        const type =
+            passwordInput.getAttribute("type") === "password"
+                ? "text"
+                : "password";
+        passwordInput.setAttribute("type", type);
+
+        if (type === "password") {
+            toggleIcon.classList.remove("bi-eye-slash");
+            toggleIcon.classList.add("bi-eye");
+        } else {
+            toggleIcon.classList.remove("bi-eye");
+            toggleIcon.classList.add("bi-eye-slash");
+        }
+    });
 });
