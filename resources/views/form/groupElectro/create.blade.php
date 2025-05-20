@@ -77,10 +77,22 @@
                         @error('address') <br>[ERROR]:{{ $message }} @enderror
                     </div>
 
-                    <div class="mb-3">
-                        <label class="form-label" for="cod_address">Código Postal:</label>
-                        <input class="form-control" type="text" id="cod_address" name="cod_address" value="{{ old('cod_address') }}" data-bs-toggle="tooltip" title="Introduzca el código postal">
-                        @error('cod_address') <br>[ERROR]:{{ $message }} @enderror
+                    <div class="row mb-3">
+                        <div class="col-md-4">
+                            <label class="form-label" for="cod_address">Código Postal:</label>
+                            <input class="form-control" type="text" id="cod_address" name="cod_address" value="{{ old('cod_address') }}" data-bs-toggle="tooltip" title="Introduzca el código postal">
+                            @error('cod_address') <br>[ERROR]:{{ $message }} @enderror
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label" for="local_address">Localidad:</label>
+                            <input class="form-control" type="text" id="local_address" name="local_address" value="{{ old('local_address') }}" data-bs-toggle="tooltip" title="Introduzca la localidad">
+                            @error('local_address') <br>[ERROR]:{{ $message }} @enderror
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label" for="town_address">Municipio:</label>
+                            <input class="form-control" type="text" id="town_address" name="town_address" value="{{ old('town_address') }}" data-bs-toggle="tooltip" title="Introduzca el municipio">
+                            @error('town_address') <br>[ERROR]:{{ $message }} @enderror
+                        </div>
                     </div>
 
                     <div class="mb-3">
@@ -107,16 +119,22 @@
                         @error('location') <br>[ERROR]:{{ $message }} @enderror
                     </div>
 
-                    <div class="mb-3">
-                        <label class="form-label" for="cod_location">Código Postal del Emplazamiento:</label>
-                        <input class="form-control" type="text" id="cod_location" name="cod_location" value="{{ old('cod_location') }}" data-bs-toggle="tooltip" title="Introduzca el código postal del emplazamiento">
-                        @error('cod_location') <br>[ERROR]:{{ $message }} @enderror
-                    </div>
-
-                    <div class="mb-3">
-                        <label class="form-label" for="name_location">Localidad del Emplazamiento:</label>
-                        <input class="form-control" type="text" id="name_location" name="name_location" value="{{ old('name_location') }}" data-bs-toggle="tooltip" title="Introduzca la localidad del emplazamiento">
-                        @error('name_location') <br>[ERROR]:{{ $message }} @enderror
+                    <div class="row mb-3">
+                        <div class="col-md-4">
+                            <label class="form-label" for="cod_location">Código Postal del Emplazamiento:</label>
+                            <input class="form-control" type="text" id="cod_location" name="cod_location" value="{{ old('cod_location') }}" data-bs-toggle="tooltip" title="Introduzca el código postal del emplazamiento">
+                            @error('cod_location') <br>[ERROR]:{{ $message }} @enderror
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label" for="name_location">Localidad del Emplazamiento:</label>
+                            <input class="form-control" type="text" id="name_location" name="name_location" value="{{ old('name_location') }}" data-bs-toggle="tooltip" title="Introduzca la localidad del emplazamiento">
+                            @error('name_location') <br>[ERROR]:{{ $message }} @enderror
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label" for="name_town">Municipio del Emplazamiento:</label>
+                            <input class="form-control" type="text" id="name_town" name="name_town" value="{{ old('name_town') }}" data-bs-toggle="tooltip" title="Introduzca el municipio del emplazamiento">
+                            @error('name_town') <br>[ERROR]:{{ $message }} @enderror
+                        </div>
                     </div>
 
                     <div class="mb-3">
@@ -242,7 +260,9 @@
                 </form>
             </div>
         </div>
-
     </div>
 
 @endsection
+@push('scripts')
+    <script src="{{ asset('js/groupElectro.js') }}"></script>
+@endpush

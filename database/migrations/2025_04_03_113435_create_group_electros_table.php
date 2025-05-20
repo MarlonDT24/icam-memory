@@ -20,12 +20,15 @@ return new class extends Migration
             $table->text('holder');
             $table->text('address');
             $table->text('cod_address');
+            $table->text('local_address')->nullable();
+            $table->text('town_address')->nullable();
             $table->string('cif', 20);
             $table->text('name_agent');
             $table->string('nif', 20);
             $table->text('location');
             $table->text('cod_location');
             $table->text('name_location');
+            $table->text('name_town');
             $table->text('build');
             $table->decimal('kva', 8, 2);
             $table->decimal('kw', 8, 2);

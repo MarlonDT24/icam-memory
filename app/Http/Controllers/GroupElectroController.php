@@ -8,6 +8,9 @@ use App\Http\Requests\GroupElectroRequest;
 use Illuminate\Support\Facades\Storage;
 use PhpOffice\PhpWord\TemplateProcessor;
 use PhpOffice\PhpSpreadsheet\IOFactory;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Http;
+
 
 class GroupElectroController extends Controller
 {
@@ -44,12 +47,15 @@ class GroupElectroController extends Controller
         $groupElectro->holder = $request->input('holder');
         $groupElectro->address = $request->input('address');
         $groupElectro->cod_address = $request->input('cod_address');
+        $groupElectro->local_address = $request->input('local_address');
+        $groupElectro->town_address = $request->input('town_address');
         $groupElectro->cif = $request->input('cif');
         $groupElectro->name_agent = $request->input('name_agent');
         $groupElectro->nif = $request->input('nif');
         $groupElectro->location = $request->input('location');
         $groupElectro->cod_location = $request->input('cod_location');
         $groupElectro->name_location = $request->input('name_location');
+        $groupElectro->name_town = $request->input('name_town');
         $groupElectro->build = $request->input('build');
         $groupElectro->kva = $request->input('kva');
         $groupElectro->kw = $request->input('kw');
@@ -64,8 +70,8 @@ class GroupElectroController extends Controller
         $groupElectro->w = $request->input('w');
         $groupElectro->factor = $request->input('factor');
         $groupElectro->method = $request->input('method');
-          
-    
+
+
         // En caso de que se suba la imagen
         if ($request->hasFile('cover')) {
             // Metodo para guardar varios archivos en el mismo lugar (en este caso en el /storage/public)
@@ -114,12 +120,15 @@ class GroupElectroController extends Controller
         $groupElectro->holder = $request->input('holder');
         $groupElectro->address = $request->input('address');
         $groupElectro->cod_address = $request->input('cod_address');
+        $groupElectro->local_address = $request->input('local_address');
+        $groupElectro->town_address = $request->input('town_address');
         $groupElectro->cif = $request->input('cif');
         $groupElectro->name_agent = $request->input('name_agent');
         $groupElectro->nif = $request->input('nif');
         $groupElectro->location = $request->input('location');
         $groupElectro->cod_location = $request->input('cod_location');
         $groupElectro->name_location = $request->input('name_location');
+        $groupElectro->name_town = $request->input('name_town');
         $groupElectro->build = $request->input('build');
         $groupElectro->kva = $request->input('kva');
         $groupElectro->kw = $request->input('kw');
@@ -134,7 +143,7 @@ class GroupElectroController extends Controller
         $groupElectro->w = $request->input('w');
         $groupElectro->factor = $request->input('factor');
         $groupElectro->method = $request->input('method');
-        
+
         // En caso de que se suba la imagen
         if ($request->hasFile('cover')) {
             // Elimina la imagen anterior si existe
@@ -186,6 +195,17 @@ class GroupElectroController extends Controller
         return redirect()->route('form.index');
     }
 
+    public function geoLookup(Request $request)
+    {
+        $postal = $request->input('postalcode');
+        $url = "http://api.geonames.org/postalCodeLookupJSON?postalcode={$postal}&country=ES&username=marlon24";
+
+        $response = Http::get($url);
+
+        return response()->json($response->json());
+    }
+
+
     public function getExcelDate($file)
     {
         if (!file_exists($file)) {
@@ -228,21 +248,24 @@ class GroupElectroController extends Controller
         $templateProcessor->setValue('holder', $groupElectro->holder);
         $templateProcessor->setValue('address', $groupElectro->address);
         $templateProcessor->setValue('cod_address', $groupElectro->cod_address);
+        $templateProcessor->setValue('local_address', $groupElectro->local_address);
+        $templateProcessor->setValue('town_address', $groupElectro->town_address);
         $templateProcessor->setValue('cif', $groupElectro->cif);
         $templateProcessor->setValue('name_agent', $groupElectro->name_agent);
         $templateProcessor->setValue('nif', $groupElectro->nif);
         $templateProcessor->setValue('location', $groupElectro->location);
         $templateProcessor->setValue('cod_location', $groupElectro->cod_location);
         $templateProcessor->setValue('name_location', $groupElectro->name_location);
+        $templateProcessor->setValue('name_town', $groupElectro->name_town);
         $templateProcessor->setValue('build', $groupElectro->build);
         $templateProcessor->setValue('kva', $groupElectro->kva);
         $templateProcessor->setValue('kw', $groupElectro->kw);
         $templateProcessor->setValue('budget', $groupElectro->budget);
-        $templateProcessor->setValue ('mark', $groupElectro->mark);
-        $templateProcessor->setValue ('model', $groupElectro->model);
-        $templateProcessor->setValue ('air_entry', $groupElectro->air_entry);
-        $templateProcessor->setValue ('air_flow', $groupElectro->air_flow);
-        $templateProcessor->setValue ('method', $groupElectro->method);
+        $templateProcessor->setValue('mark', $groupElectro->mark);
+        $templateProcessor->setValue('model', $groupElectro->model);
+        $templateProcessor->setValue('air_entry', $groupElectro->air_entry);
+        $templateProcessor->setValue('air_flow', $groupElectro->air_flow);
+        $templateProcessor->setValue('method', $groupElectro->method);
 
         // Datos del excel
         foreach ($datesExcel as $key => $value) {
@@ -257,7 +280,7 @@ class GroupElectroController extends Controller
             'pepe_a' => 'ICPA',
             'oscar_a' => 'ICOA',
         ];
-        
+
         $authorText = $authors[$groupElectro->author] ?? 'Autor no especificado';
         $templateProcessor->setValue('author', $authorText);
 
@@ -268,12 +291,12 @@ class GroupElectroController extends Controller
             'noclasi' => 'no clasificada',
             default => 'no clasificada',
         };
-        
+
         $templateProcessor->setValue('type_clasi', $typeClasiText);
 
-        
+
         //Terminar de hacer el tipo de tensio
-        $tensionText = match($groupElectro->tension_type) {
+        $tensionText = match ($groupElectro->tension_type) {
             '3F+N' => 'trifásica, de 400 V entre fases y 230 V entre fase y neutro.',
             'F+N' => 'de 230 V entre fase y neutro.'
         };
@@ -287,7 +310,7 @@ class GroupElectroController extends Controller
 
         //Imagenes
         if ($groupElectro->cover) {
-            $imagePath = storage_path('app/public/'. $groupElectro->cover);
+            $imagePath = storage_path('app/public/' . $groupElectro->cover);
             if (file_exists($imagePath)) {
                 $templateProcessor->setImageValue('cover', [
                     'path' => $imagePath,
@@ -298,7 +321,7 @@ class GroupElectroController extends Controller
             }
         }
         if ($groupElectro->image_model) {
-            $imagePath = storage_path('app/public/'. $groupElectro->image_model);
+            $imagePath = storage_path('app/public/' . $groupElectro->image_model);
             if (file_exists($imagePath)) {
                 $templateProcessor->setImageValue('image_model', [
                     'path' => $imagePath,
@@ -309,7 +332,7 @@ class GroupElectroController extends Controller
             }
         }
         if ($groupElectro->image_dimensions) {
-            $imagePath = storage_path('app/public/'. $groupElectro->image_dimensions);
+            $imagePath = storage_path('app/public/' . $groupElectro->image_dimensions);
             if (file_exists($imagePath)) {
                 $templateProcessor->setImageValue('image_dimensions', [
                     'path' => $imagePath,
@@ -332,10 +355,10 @@ class GroupElectroController extends Controller
         $templateProcessor->setValue('resul', $format);
 
         //Fecha actual para el documento
-        $meses = [ 1 => 'Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
+        $meses = [1 => 'Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
         $mes = $meses[date('n')];
         $anyo = date('Y');
-        $formatdate = ucfirst($mes). ' de ' .$anyo;
+        $formatdate = ucfirst($mes) . ' de ' . $anyo;
         $templateProcessor->setValue('fecha', $formatdate);
 
         $templateProcessor->saveAs($outputPath);
