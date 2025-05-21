@@ -18,4 +18,8 @@
             <li><a class="dropdown-item" href="{{ route('principal') }}#hist-group">Historial de Grupo Electrógeno</a></li>
         </ul>
     </li>
+
+    <li class="nav-item dropdown">
+        <a class="nav-link" href="{{ route('pci.index') }}" id="histDesplegable" role="button" aria-expanded="false">PCI Manager</a>
+    </li>
 </ul>

@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\FormController;
 use App\Http\Controllers\GroupElectroController;
 use App\Http\Controllers\LoginController;
+use App\Http\Controllers\PciController;
 use App\Http\Controllers\LowVoltageController;
 
 // Pagina principal para todas las memorias
@@ -43,4 +44,9 @@ Route::get('login', [LoginController::class, 'loginForm'])->name('loginForm');
 Route::post('login', [LoginController::class, 'login'])->name('login');
 Route::post('logout', [LoginController::class, 'logout'])->name('logout');
 
+// Rutas para que funcionen los campos autocompletados según los codigos postales
 Route::get('/geolookup', [App\Http\Controllers\GroupElectroController::class, 'geoLookup']);
+
+// Rutas de signup y login
+Route::get('/pci', [PciController::class, 'index'])->name('pci.index');
+Route::post('/pci/calculate', [PciController::class, 'calculate'])->name('pci.calculate');
