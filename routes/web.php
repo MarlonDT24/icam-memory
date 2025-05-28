@@ -49,4 +49,4 @@ Route::get('/geolookup', [App\Http\Controllers\GroupElectroController::class, 'g
 
 // Rutas de signup y login
 Route::get('/pci', [PciController::class, 'index'])->name('pci.index');
-Route::post('/pci/calculate', [PciController::class, 'calculate'])->name('pci.calculate');
+Route::post('/pci/calculate/ajax', [PciController::class, 'calculateAjax'])->name('pci.calculate.ajax');

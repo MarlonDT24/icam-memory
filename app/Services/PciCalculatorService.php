@@ -12,11 +12,11 @@ class PciCalculatorService
      */
     public function calculateWithJustification(array $inputs): array
     {
-        $tipo = strtoupper($inputs['tipo'] ?? '');
+        $tipo = ($inputs['tipo'] ?? '');
         $superficie = (float) ($inputs['superficie'] ?? 0);
         $uso = strtolower($inputs['uso'] ?? '');
-        $nivel = (int) ($inputs['nivel'] ?? 1);
-        $rasante = strtolower($inputs['rasante'] ?? 'sotano'); // opcional
+        $nivel = (int) ($inputs['nivel'] ?? 1); 
+        $rasante = strtolower($inputs['rasante'] ?? 'rasante'); // opcional pero por defecto será "rasante"
 
         // 1. Riesgo textual
         $riesgo = match (true) {
@@ -48,7 +48,7 @@ class PciCalculatorService
         $usoHidrantesD = $this->usoHidrantesD($tipo, $superficie, $riesgo);
 
         // 8. Extintores (1 por cada 200 m²)
-        $cantidadExtintores = $this->usoExtintores($riesgo, $superficie);
+        $cantidadExtintores = $this->usoExtintores($superficie, $riesgo);
 
         // 9. BIEs
         $usoBIEs = $this->usoBies($tipo, $riesgo, $superficie);
@@ -60,22 +60,22 @@ class PciCalculatorService
         $usoControlHumos = $this->usoControlH($uso, $riesgo, $superficie);
 
         return [
-            'tipo' => $tipo,
-            'uso' => ucfirst($uso),
-            'superficie' => $superficie,
-            'riesgo_num' => $nivel,
-            'riesgo_txt' => $riesgo,
-            'superficie_maxima' => $superficieMax,
-            'resistencia_fuego' => $resistencia,
-            'resistencia_ligera' => $resistenciaLigera,
-            'detectores' => $usoDetectores ? 'Sí' : 'No',
-            'pulsadores' => $usoPulsadores ? 'Sí' : 'No',
-            'hidrantesC' => $usoHidrantesC ? 'Sí' : 'No',
-            'hidrantesD' => $usoHidrantesD ? 'Sí' : 'No',
-            'extintores' => $cantidadExtintores,
-            'bies' => $usoBIEs ? 'Sí' : 'No',
-            'rociadores' => $usoRociadores ? 'Sí' : 'No',
-            'control_humos' => $usoControlHumos ? 'Sí' : 'No',
+            'Tipo' => $tipo,
+            'Uso' => ucfirst($uso),
+            'Superficie' => $superficie,
+            'Nivel' => $nivel,
+            'Riesgo' => $riesgo,
+            'Superficie_max.' => $superficieMax,
+            'EF' => $resistencia,
+            'EFL' => $resistenciaLigera,
+            'DET.' => $usoDetectores ? 'Sí' : 'No',
+            'PULSAD.' => $usoPulsadores ? 'Sí' : 'No',
+            'HIDRA. CAM' => $usoHidrantesC ? 'Sí' : 'No',
+            'HIDRA. DIR' => $usoHidrantesD ? 'Sí' : 'No',
+            'EXTIN.' => $cantidadExtintores,
+            'BIES' => $usoBIEs ? 'Sí' : 'No',
+            'ROCI.' => $usoRociadores ? 'Sí' : 'No',
+            'C.HUMOS' => $usoControlHumos ? 'Sí' : 'No',
         ];
     }
 
@@ -204,12 +204,13 @@ class PciCalculatorService
             ['C', 'BAJO'] => 'EI 30',
             ['C', 'MEDIO'] => 'EI 30',
             ['C', 'ALTO'] => 'EI 30',
+            default => 'No Admitido',
         };
     }
 
+    //La lógica de detectores se ajusta al BOE correctamente
     private function usoDetectores(string $uso, string $tipo, int $nivel, string $riesgo, float $superficie): string
     {
-        $tipo = strtoupper($tipo);
         $uso = strtolower($uso);
 
         return match (true) {
@@ -235,85 +236,88 @@ class PciCalculatorService
 
     private function usoPulsadores(bool $usaDetectores, float $superficie): bool
     {
-        return !$usaDetectores && $superficie >= 400;
+        return $usaDetectores || $superficie >= 400;
+        //Si no hay detectores y la superficie es mayor o igual de 400 entonces si necesitan detectores
     }
 
     private function usoHidrantesC(string $tipo, float $superficie, string $riesgo): string
     {
-        $tipo = strtoupper($tipo);
-
+        
+        $riesgo = strtoupper(trim($riesgo));
         return match (true) {
             // Tipo Av
-            $tipo === 'Av' && $superficie >= 300 && $riesgo === 'BAJO' => false,
             $tipo === 'Av' && $superficie >= 1000 && $riesgo === 'BAJO' => true,
-            $tipo === 'Av' && $superficie >= 300 && $riesgo === 'MEDIO' => true,
+            $tipo === 'Av' && $superficie >= 300 && $riesgo === 'BAJO' => false,
             $tipo === 'Av' && $superficie >= 1000 && $riesgo === 'MEDIO' => true,
-            $tipo === 'Av' && $superficie >= 300 && $riesgo === 'ALTO' => false,
+            $tipo === 'Av' && $superficie >= 300 && $riesgo === 'MEDIO' => true,
             $tipo === 'Av' && $superficie >= 1000 && $riesgo === 'ALTO' => false,
+            $tipo === 'Av' && $superficie >= 300 && $riesgo === 'ALTO' => false,
+
 
             // Tipo Ah
-            $tipo === 'Ah' && $superficie >= 600 && $riesgo === 'BAJO' => false,
             $tipo === 'Ah' && $superficie >= 1000 && $riesgo === 'BAJO' => true,
-            $tipo === 'Ah' && $superficie >= 600 && $riesgo === 'MEDIO' => true,
+            $tipo === 'Ah' && $superficie >= 600 && $riesgo === 'BAJO' => false,
             $tipo === 'Ah' && $superficie >= 1000 && $riesgo === 'MEDIO' => true,
-            $tipo === 'Ah' && $superficie >= 600 && $riesgo === 'ALTO' => true,
+            $tipo === 'Ah' && $superficie >= 600 && $riesgo === 'MEDIO' => true,
             $tipo === 'Ah' && $superficie >= 1000 && $riesgo === 'ALTO' => true,
+            $tipo === 'Ah' && $superficie >= 600 && $riesgo === 'ALTO' => true,
 
             // Tipo B
-            $tipo === 'B' && $superficie >= 1000 && $riesgo === 'BAJO' => false,
-            $tipo === 'B' && $superficie >= 2500 && $riesgo === 'BAJO' => false,
             $tipo === 'B' && $superficie >= 3500 && $riesgo === 'BAJO' => true,
-            $tipo === 'B' && $superficie >= 1000 && $riesgo === 'MEDIO' => false,
-            $tipo === 'B' && $superficie >= 2500 && $riesgo === 'MEDIO' => true,
+            $tipo === 'B' && $superficie >= 2500 && $riesgo === 'BAJO' => false,
+            $tipo === 'B' && $superficie >= 1000 && $riesgo === 'BAJO' => false,
             $tipo === 'B' && $superficie >= 3500 && $riesgo === 'MEDIO' => true,
-            $tipo === 'B' && $superficie >= 1000 && $riesgo === 'ALTO' => true,
-            $tipo === 'B' && $superficie >= 2500 && $riesgo === 'ALTO' => true,
+            $tipo === 'B' && $superficie >= 2500 && $riesgo === 'MEDIO' => true,
+            $tipo === 'B' && $superficie >= 1000 && $riesgo === 'MEDIO' => false,
             $tipo === 'B' && $superficie >= 3500 && $riesgo === 'ALTO' => true,
+            $tipo === 'B' && $superficie >= 2500 && $riesgo === 'ALTO' => true,
+            $tipo === 'B' && $superficie >= 1000 && $riesgo === 'ALTO' => true,
 
             // Tipo C
-            $tipo === 'C' && $superficie >= 2500 && $riesgo === 'BAJO' => false,
-            $tipo === 'C' && $superficie >= 3500 && $riesgo === 'BAJO' => false,
             $tipo === 'C' && $superficie >= 5000 && $riesgo === 'BAJO' => true,
-            $tipo === 'C' && $superficie >= 2500 && $riesgo === 'MEDIO' => false,
-            $tipo === 'C' && $superficie >= 3500 && $riesgo === 'MEDIO' => true,
+            $tipo === 'C' && $superficie >= 3500 && $riesgo === 'BAJO' => false,
+            $tipo === 'C' && $superficie >= 2500 && $riesgo === 'BAJO' => false,
             $tipo === 'C' && $superficie >= 5000 && $riesgo === 'MEDIO' => true,
-            $tipo === 'C' && $superficie >= 2500 && $riesgo === 'ALTO' => true,
-            $tipo === 'C' && $superficie >= 3500 && $riesgo === 'ALTO' => true,
+            $tipo === 'C' && $superficie >= 3500 && $riesgo === 'MEDIO' => true,
+            $tipo === 'C' && $superficie >= 2500 && $riesgo === 'MEDIO' => false,
             $tipo === 'C' && $superficie >= 5000 && $riesgo === 'ALTO' => true,
+            $tipo === 'C' && $superficie >= 3500 && $riesgo === 'ALTO' => true,
+            $tipo === 'C' && $superficie >= 2500 && $riesgo === 'ALTO' => true,
 
             // Tipo D
-            $tipo === 'D' && $superficie >= 5000 && $riesgo === 'BAJO' => true,
-            $tipo === 'D' && $superficie >= 5000 && $riesgo === 'MEDIO' => true,
-            $tipo === 'D' && $superficie >= 5000 && $riesgo === 'ALTO' => true,
+            $tipo === 'D' && $superficie >= 5000 && in_array($riesgo, ['BAJO', 'MEDIO', 'ALTO']) => true,
+
+            default => false,
         };
     }
 
     private function usoHidrantesD(string $tipo, float $superficie, string $riesgo): string
     {
-        $tipo = strtoupper($tipo);
 
         return match (true) {
             // Tipo Ah
-            $tipo === 'Ah' && $superficie >= 2500 && $riesgo === 'MEDIO' => false,
             $tipo === 'Ah' && $superficie >= 3500 && $riesgo === 'MEDIO' => true,
-            $tipo === 'Ah' && $superficie >= 2500 && $riesgo === 'ALTO' => true,
+            $tipo === 'Ah' && $superficie >= 2500 && $riesgo === 'MEDIO' => false,
             $tipo === 'Ah' && $superficie >= 3500 && $riesgo === 'ALTO' => true,
+            $tipo === 'Ah' && $superficie >= 2500 && $riesgo === 'ALTO' => true,
 
             // Tipo B
-            $tipo === 'B' && $superficie >= 2500 && $riesgo === 'MEDIO' => false,
             $tipo === 'B' && $superficie >= 3500 && $riesgo === 'MEDIO' => true,
-            $tipo === 'B' && $superficie >= 2500 && $riesgo === 'ALTO' => true,
+            $tipo === 'B' && $superficie >= 2500 && $riesgo === 'MEDIO' => false,
             $tipo === 'B' && $superficie >= 3500 && $riesgo === 'ALTO' => true,
+            $tipo === 'B' && $superficie >= 2500 && $riesgo === 'ALTO' => true,
 
             // Tipo C
-            $tipo === 'C' && $superficie >= 2500 && $riesgo === 'MEDIO' => false,
             $tipo === 'C' && $superficie >= 3500 && $riesgo === 'MEDIO' => true,
-            $tipo === 'C' && $superficie >= 2500 && $riesgo === 'ALTO' => true,
+            $tipo === 'C' && $superficie >= 2500 && $riesgo === 'MEDIO' => false,
             $tipo === 'C' && $superficie >= 3500 && $riesgo === 'ALTO' => true,
+            $tipo === 'C' && $superficie >= 2500 && $riesgo === 'ALTO' => true,
 
             // Tipo D
             $tipo === 'D' && $superficie >= 10000 && $riesgo === 'MEDIO' => true,
             $tipo === 'D' && $superficie >= 10000 && $riesgo === 'ALTO' => true,
+            
+            default => false,
         };
     }
 
@@ -339,8 +343,6 @@ class PciCalculatorService
 
     private function usoBies(string $tipo, string $riesgo, float $superficie): string
     {
-        $tipo = strtoupper($tipo);
-
         return match (true) {
             // Tipo Av
             $tipo === 'Av' && $superficie >= 300 => true,
@@ -355,12 +357,13 @@ class PciCalculatorService
             $tipo === 'C' && $superficie >= 500 && $riesgo === 'ALTO' => true,
             // Tipo D
             $tipo === 'D' && $superficie >= 5000 && $riesgo === 'ALTO' => true,
+
+            default => false
         };
     }
 
     private function usoRociadores(string $uso, string $tipo, string $riesgo, float $superficie): string
     {
-        $tipo = strtoupper($tipo);
         $uso = strtolower($uso);
 
         return match (true) {
@@ -396,6 +399,8 @@ class PciCalculatorService
             // Almacenamiento
             $uso === 'almacenamiento' && $riesgo === 'MEDIO' && $superficie >= 1000 => true,
             $uso === 'almacenamiento' && $riesgo === 'ALTO' && $superficie >= 800 => true,
+
+            default => false
         };
     }
 }

@@ -13,19 +13,24 @@ class PciController extends Controller
         return view('pci.index');
     }
 
-    public function calculate(Request $request)
+    public function calculateAjax(Request $request)
     {
         $validated = $request->validate([
-        'tipo' => 'required|string',
-        'superficie' => 'required|numeric|min:1',
-        'uso' => 'required|string|in:almacenamiento,producción',
-        'nivel' => 'required|integer|min:1|max:8',
-        'rasante' => 'nullable|string|in:rasante,sotano',
-    ]);
+            'nombre' => 'required|string|max:100',
+            'tipo' => 'required|string|in:Av,Ah,B,C,D',
+            'superficie' => 'required|numeric|min:1',
+            'uso' => 'required|string|in:almacenamiento,producción',
+            'nivel' => 'required|integer|min:1|max:8',
+            'rasante' => 'nullable|string|in:rasante,sotano',
+        ]);
 
-    $service = new PciCalculatorService();
-    $resultados = $service->calculateWithJustification($validated);
+        $service = new PciCalculatorService();
+        $resultados = $service->calculateWithJustification($validated);
 
-    return view('pci.index', compact('resultados'));
+        return response()->json([
+            'success' => true,
+            'nombre' => $validated['nombre'],
+            'resultado' => $resultados,
+        ]);
     }
 }

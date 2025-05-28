@@ -3,76 +3,93 @@
 @section('title', 'Compilador PCI - RSCIEI 2025')
 
 @section('content')
-<div class="max-w-4xl mx-auto p-6 bg-white rounded shadow mt-6 space-y-6">
-    <h1 class="text-2xl font-bold mb-4">Formulario de Evaluación PCI</h1>
+<div class="container my-5">
 
-    <form action="{{ route('pci.calculate') }}" method="POST" class="grid grid-cols-1 md:grid-cols-2 gap-4">
-        @csrf
+    <h1 class="h3 mb-4 fw-bold text-center">Formulario de Evaluación </h1>
 
-        <div>
-            <label for="tipo" class="font-semibold">Tipo de nave (A, B, C, etc.)</label>
-            <input type="text" name="tipo" id="tipo" class="w-full border p-2 rounded" value="{{ old('tipo') }}">
-            @error('tipo') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
+    <div class="card shadow-sm mb-4">
+        <div class="card-body">
+            <form id="pciForm" action="{{ route('pci.calculate.ajax') }}" method="POST" class="d-flex flex-wrap align-items-end justify-content-center gap-3">
+                @csrf
+
+                <div class="me-2" style="width: 180px;">
+                    <label for="nombre" class="form-label fw-semibold">Nombre de la Tabla:</label>
+                    <input type="text" name="nombre" id="nombre" class="form-control" value="{{ old('nombre') }}">
+                </div>
+                
+                <div class="me-2" style="width: 100px;">
+                    <label for="tipo" class="form-label fw-semibold">Tipo</label>
+                    <select name="tipo" id="tipo" class="form-select">
+                        <option value="">--</option>
+                        <option value="Av" {{ old('tipo') == 'Av' ? 'selected' : '' }}>Av</option>
+                        <option value="Ah" {{ old('tipo') == 'Ah' ? 'selected' : '' }}>Ah</option>
+                        <option value="B" {{ old('tipo') == 'B' ? 'selected' : '' }}>B</option>
+                        <option value="C" {{ old('tipo') == 'C' ? 'selected' : '' }}>C</option>
+                        <option value="D" {{ old('tipo') == 'D' ? 'selected' : '' }}>D</option>
+                    </select>
+                </div>
+
+                <div class="me-2" style="width: 140px;">
+                    <label for="superficie" class="form-label fw-semibold">Superficie</label>
+                    <input type="number" name="superficie" id="superficie" class="form-control" value="{{ old('superficie') }}">
+                </div>
+
+                <div class="me-2" style="width: 200px;">
+                    <label for="uso" class="form-label fw-semibold">Uso</label>
+                    <select name="uso" id="uso" class="form-select">
+                        <option value="">--</option>
+                        <option value="almacenamiento" {{ old('uso') == 'almacenamiento' ? 'selected' : '' }}>Almacenamiento</option>
+                        <option value="producción" {{ old('uso') == 'producción' ? 'selected' : '' }}>Producción</option>
+                    </select>
+                </div>
+
+                <div class="me-2" style="width: 100px;">
+                    <label for="nivel" class="form-label fw-semibold">Riesgo</label>
+                    <select name="nivel" id="nivel" class="form-select">
+                        <option value="">--</option>
+                        @for ($i = 1; $i <= 8; $i++)
+                            <option value="{{ $i }}" {{ old('nivel') == $i ? 'selected' : '' }}>{{ $i }}</option>
+                        @endfor
+                    </select>
+                </div>
+
+                <div class="me-2" style="width: 190px;">
+                    <label for="rasante" class="form-label fw-semibold">Planta</label>
+                    <select name="rasante" id="rasante" class="form-select">
+                        <option value="rasante" {{ old('rasante', 'rasante') == 'rasante' ? 'selected' : '' }}>Sobre rasante</option>
+                        <option value="sotano" {{ old('rasante') == 'sotano' ? 'selected' : '' }}>Sótano</option>
+                    </select>
+                </div>
+
+                <div class="me-2">
+                    <button type="submit" class="btn btn-danger">
+                        Calcular
+                    </button>
+                </div>
+            </form>
         </div>
+    </div>
 
-        <div>
-            <label for="superficie" class="font-semibold">Superficie (m²)</label>
-            <input type="number" name="superficie" id="superficie" class="w-full border p-2 rounded" value="{{ old('superficie') }}">
-            @error('superficie') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
-        </div>
+   {{-- Tabla horizontal de resultados generado dinamicamente--}}
+   <div class="table-responsive" id="tabla-wrapper">
+    <table class="table table-bordered text-center align-middle" id="tabla-resultados">
+        <thead class="table-light">
+            <tr id="cabecera-tabla">
+                <th>RESULTADOS</th> {{-- Columna fija para los nombres --}}
+                {{-- Las columnas de los parámetros se rellenan dinámicamente con JS --}}
+            </tr>
+        </thead>
+        <tbody id="cuerpo-tabla">
+            {{-- Filas se añaden dinámicamente con JS --}}
+        </tbody>
+    </table>
+</div>
 
-        <div>
-            <label for="uso" class="font-semibold">Uso</label>
-            <select name="uso" id="uso" class="w-full border p-2 rounded">
-                <option value="">-- Selecciona --</option>
-                <option value="almacenamiento" {{ old('uso') == 'almacenamiento' ? 'selected' : '' }}>Almacenamiento</option>
-                <option value="producción" {{ old('uso') == 'producción' ? 'selected' : '' }}>Producción</option>
-            </select>
-            @error('uso') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
-        </div>
-
-        <div>
-            <label for="nivel" class="font-semibold">Nivel de riesgo (1-8)</label>
-            <input type="number" name="nivel" id="nivel" class="w-full border p-2 rounded" min="1" max="8" value="{{ old('nivel') }}">
-            @error('nivel') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
-        </div>
-
-        <div>
-            <label for="rasante" class="font-semibold">Planta (opcional)</label>
-            <select name="rasante" id="rasante" class="w-full border p-2 rounded">
-                <option value="">-- Selecciona --</option>
-                <option value="rasante" {{ old('rasante') == 'rasante' ? 'selected' : '' }}>Sobre rasante</option>
-                <option value="sotano" {{ old('rasante') == 'sotano' ? 'selected' : '' }}>Bajo rasante</option>
-            </select>
-        </div>
-
-        <div class="col-span-full">
-            <button type="submit" class="bg-blue-700 text-white px-6 py-2 rounded hover:bg-blue-800">
-                Calcular medidas PCI
-            </button>
-        </div>
-    </form>
-
-    @isset($resultados)
-        <div class="mt-10">
-            <h2 class="text-xl font-semibold mb-4">Resultados del Cálculo</h2>
-            <table class="w-full table-auto border-collapse border border-gray-300">
-                <thead class="bg-gray-100">
-                    <tr>
-                        <th class="border px-4 py-2 text-left">Parámetro</th>
-                        <th class="border px-4 py-2 text-left">Resultado</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach ($resultados as $clave => $valor)
-                        <tr>
-                            <td class="border px-4 py-2 font-medium">{{ ucfirst(str_replace('_', ' ', $clave)) }}</td>
-                            <td class="border px-4 py-2">{{ $valor }}</td>
-                        </tr>
-                    @endforeach
-                </tbody>
-            </table>
-        </div>
-    @endisset
 </div>
 @endsection
+@push('scripts')
+    <script>
+        const PCI_ROUTE = "{{ route('pci.calculate.ajax') }}";
+    </script>
+    <script src="{{ asset('js/pci.js') }}"></script>
+@endpush
