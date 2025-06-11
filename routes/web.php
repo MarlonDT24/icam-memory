@@ -1,16 +1,18 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\HomeController;
 use App\Http\Controllers\FormController;
 use App\Http\Controllers\GroupElectroController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\PciController;
 use App\Http\Controllers\LowVoltageController;
 
-// Pagina principal para todas las memorias
-Route::get('/', [FormController::class, 'index'])->name('principal')->middleware('auth');
+// Pagina principal
+Route::get('/', [HomeController::class, 'index'])->name('home')->middleware('auth');
 
 // Se usa el FormController para las vistas de Compatibilidad
+Route::get('/memorias', [FormController::class, 'index'])->name('form.index')->middleware('auth');
 Route::resource('form', FormController::class)->names('form')->middleware('auth');
 Route::get('/form/{form}/word', [FormController::class, 'convertToWord'])->name('form.convertToWord')->middleware('auth');
 

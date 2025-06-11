@@ -28,17 +28,19 @@
                         @csrf
                         <div class="mb-3">
                             <label for="email" class="form-label">Usuario:</label>
-                            <input type="text" name="email" id="email" class="form-control" value="{{ old('email') }}">
+                            <input type="text" name="email" id="email" class="form-control"  @error('email') is-invalid @enderror" value="{{ old('email') }}">
+                            @error('email') <div class="invalid-feedback">{{ $message }}</div> @enderror
                         </div>
                         
                         <div class="mb-3">
                             <label for="password" class="form-label">Contraseña:</label>
                             <div class="input-group">
-                                <input type="password" name="password" id="password" class="form-control">
+                                <input type="password" name="password" id="password" class="form-control" @error('password') is-invalid @enderror">
                                 <button type="button" class="btn btn-outline-secondary" id="togglePassword" tabindex="-1">
                                     <i class="bi bi-eye" id="toggleIcon"></i>
                                 </button>
                             </div>
+                            @error('password') <div class="invalid-feedback">{{ $message }}</div> @enderror
                         </div>
                 
                         <div class="mb-3 form-check">

@@ -6,6 +6,7 @@ use App\Http\Requests\SignupRequest;
 use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use App\Http\Requests\LoginRequest;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use App\Http\Controllers\Controller;
@@ -34,38 +35,26 @@ class LoginController extends Controller
     public function loginForm(): View|RedirectResponse
     {
         if (Auth::viaRemember() || Auth::check()) {
-            return redirect()->route('principal');
+            return redirect()->route('home');
         } else {
             return view('auth.login');
         }
     }
 
-    public function login(Request $request): View|RedirectResponse
+    public function login(LoginRequest $request): View|RedirectResponse
     {
         $credentials = $request->only('email', 'password');
         $rememberLogin = ($request->get('remember')) ? true : false;
 
         if(Auth::guard('web')->attempt($credentials, $rememberLogin)) {
             $request->session()->regenerate();
-            return redirect()->route('principal');
-        } else {
-            $error = 'Error al acceder a la aplicación';
-            return view('auth.login', compact('error'));
+            return redirect()->route('home');
         }
 
-        /* /* $credentials = $request->validate([
-            'username' => 'required|email',
-            'password' => 'required',
-        ]);
-    
-        $remember = $request->filled('remember'); 
-    
-        if (Auth::attempt($credentials, $remember)) {
-            $request->session()->regenerate();
-            return redirect()->route('users.account')->with('success', 'Inicio de sesión exitoso.');
-        }
-    
-        return back()->withErrors(['email' => 'Las credenciales ingresadas no son correctas.'])->withInput(); */
+        return back()->withErrors([
+            'email' => 'Las credenciales ingresadas no son correctas.'
+        ])->withInput();
+
     }
 
     public function logout(Request $request): RedirectResponse
@@ -74,6 +63,6 @@ class LoginController extends Controller
         $request->session()->invalidate();
         $request->session()->regenerateToken();
 
-        return redirect()->route('principal');
+        return redirect()->route('login');
     }
 }
