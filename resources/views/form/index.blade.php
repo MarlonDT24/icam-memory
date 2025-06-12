@@ -137,9 +137,9 @@
         <section class="py-5" id="hist-volt">
             <h2 class="text-center text-muted mb-4">Historial de Memorias de Baja Tensión</h2>
             <h5 class="text-center text-muted mb-4">(Proximamente disponible)</h5>
-            @if ($forms->isEmpty())
+            {{-- @if ($forms->isEmpty())
                 <p class="text-center text-muted">No existen memorias de Baja Tensión para mostrar.</p>
-            @else
+            @else --}}
                 <div class="position-relative memory-carousel">
                     <!-- Botón izquierdo -->
                     <button class="btn btn-outline-danger position-absolute top-50 start-0 translate-middle-y prev-btn" style="margin-left: -45px;">&#10094;</button>
@@ -176,7 +176,7 @@
                     <!-- Botón derecho -->
                     <button class="btn btn-outline-danger position-absolute top-50 end-0 translate-middle-y next-btn" style="margin-right: -45px;">&#10095;</button>
                 </div>
-            @endif
+            {{-- @endif --}}
         </section>
 
 

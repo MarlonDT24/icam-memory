@@ -1,8 +1,16 @@
-<footer class="footer bg-danger text-center py-3 mt-4">
-    <div class="container">
-        <a href="{{ route('form.index') }}#tipo-memoria" class="text-light text-decoration-none mx-2">Crear Memoria</a>
-        <p class="mb-2">
-            ICAM SL - GENERADOR DE MEMORIAS. Desarrollado por: Marlon Torres &#x00A9; {{ date('Y') }}
-        </p>
+<footer class="footer bg-danger text-light py-4 mt-auto border-top">
+    <div class="container text-center d-flex flex-column flex-md-row justify-content-between align-items-center gap-3">
+        <div class="d-flex flex-column flex-md-row gap-3">
+            <a href="{{ route('form.index') }}#tipo-memoria" class="text-decoration-none text-light fw-semibold">
+                Crear Memoria
+            </a>
+            <a href="{{ route('pci.index') }}" class="text-decoration-none text-light fw-semibold">
+                PCI Manager
+            </a>
+        </div>
+
+        <div class="text-black small">
+            ICAM SL - Plataforma de Gestión Técnica &middot; Desarrollado por <strong>Marlon Torres</strong> &copy; {{ date('Y') }}
+        </div>
     </div>
 </footer>

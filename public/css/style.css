@@ -1,4 +1,4 @@
-body {
+body.with-navbar {
     padding-top: 80px; /* Ajusta según altura real del navbar */
 }
 html {

@@ -4,9 +4,9 @@
 
 @section('content')
 <div class="container py-5">
-    <div class="text-center text-white mb-5">
+    <div class="text-center mb-5">
         <h1 class="display-4 fw-bold">Bienvenido, {{ Auth::user()->name ?? 'Usuario' }}</h1>
-        <p class="lead text-white-50">Selecciona una herramienta para comenzar</p>
+        <p class="lead">Selecciona una herramienta para comenzar</p>
     </div>
 
     <div class="row justify-content-center g-4">

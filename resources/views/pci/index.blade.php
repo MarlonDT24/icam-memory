@@ -5,7 +5,7 @@
 @section('content')
 <div class="container my-5">
 
-    <h1 class="h3 mb-4 fw-bold text-center">Formulario de Evaluación </h1>
+    <h1 class="mb-4 fw-bold text-center">Formulario de Evaluación </h1>
 
     <div class="card shadow-sm mb-4">
         <div class="card-body">

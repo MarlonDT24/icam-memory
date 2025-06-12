@@ -19,7 +19,7 @@
     @stack('scripts')
 </head>
 
-<body class="d-flex flex-column min-vh-100">
+<body class="d-flex flex-column min-vh-100 {{ request()->routeIs('login') || request()->routeIs('loginForm') ? '' : 'with-navbar' }}">
     <div class="flex-grow-1">
         @unless (request()->routeIs('login') || request()->routeIs('loginForm'))
             @include ('partials.header')
