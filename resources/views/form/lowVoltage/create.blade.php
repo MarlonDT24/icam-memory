@@ -22,7 +22,7 @@
                 </div> 
                 @endif
 
-                <form action="{{ route('form.store') }}" method="POST" enctype="multipart/form-data">
+                <form action="{{ route('lowVoltage.store') }}" method="POST" enctype="multipart/form-data">
                     @csrf
 
                     <div class="mb-3">

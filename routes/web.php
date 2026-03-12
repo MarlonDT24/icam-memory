@@ -30,7 +30,7 @@ Route::get('/groupElectro/{groupElectro}/word', [GroupElectroController::class, 
 }); */
 
 // Memorias para Baja Tensión
-Route::resource('lowVoltage', lowVoltageController::class)->names('lowVoltage')->middleware('auth');
+Route::resource('lowVoltage', LowVoltageController::class)->names('lowVoltage')->middleware('auth');
 
 /* Route::prefix('baja-tension')->name('lowVoltage.')->group(function () {
     Route::get('/crear', [LowVoltageController::class, 'create'])->name('create');
@@ -50,5 +50,5 @@ Route::post('logout', [LoginController::class, 'logout'])->name('logout');
 Route::get('/geolookup', [App\Http\Controllers\GroupElectroController::class, 'geoLookup']);
 
 // Rutas de signup y login
-Route::get('/pci', [PciController::class, 'index'])->name('pci.index');
-Route::post('/pci/calculate/ajax', [PciController::class, 'calculateAjax'])->name('pci.calculate.ajax');
+Route::get('/pci', [PciController::class, 'index'])->name('pci.index')->middleware('auth');
+Route::post('/pci/calculate/ajax', [PciController::class, 'calculateAjax'])->name('pci.calculate.ajax')->middleware('auth');

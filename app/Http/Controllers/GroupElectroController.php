@@ -116,7 +116,9 @@ class GroupElectroController extends Controller
     {
         $groupElectro->name = $request->input('name');
         $groupElectro->author = $request->input('author');
-        $groupElectro->budget_excel = $request->file('budget_excel')->store('excels', 'private');
+        if ($request->hasFile('budget_excel')) {
+            $groupElectro->budget_excel = $request->file('budget_excel')->store('excels', 'private');
+        }
         $groupElectro->holder = $request->input('holder');
         $groupElectro->address = $request->input('address');
         $groupElectro->cod_address = $request->input('cod_address');
@@ -198,7 +200,8 @@ class GroupElectroController extends Controller
     public function geoLookup(Request $request)
     {
         $postal = $request->input('postalcode');
-        $url = "http://api.geonames.org/postalCodeLookupJSON?postalcode={$postal}&country=ES&username=marlon24";
+        $username = env('GEONAMES_USERNAME', 'marlon24');
+        $url = "http://api.geonames.org/postalCodeLookupJSON?postalcode={$postal}&country=ES&username={$username}";
 
         $response = Http::get($url);
 

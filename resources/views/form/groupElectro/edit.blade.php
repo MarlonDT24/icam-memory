@@ -22,8 +22,7 @@
 
                     <div class="mb-3">
                         <label class="form-label" for="budget_excel">Subir Excel:</label>
-                        <input class="form-control" type="file" id="budget_excel" budget_excel="budget_excel" accept=".xlsx, .xls"
-                        value="{{ old('budget_excel') ? old('budget_excel') :  $groupElectro->budget_excel }}">
+                        <input class="form-control" type="file" id="budget_excel" name="budget_excel" accept=".xlsx, .xls">
                         @error('budget_excel') <small class="text-danger">{{ $message }}</small> @enderror
                     </div>
                     
@@ -135,7 +134,9 @@
                         <select class="form-select" id="type_clasi" name="type_clasi" data-bs-toggle="tooltip" title="Seleccione el tipo de clasificación">
                             <option value="">-- Seleccione --</option>
                             <option value="mojado" {{ old('type_clasi', $groupElectro->type_clasi ?? '') == 'mojado' ? 'selected' : '' }}>Tipo Mojado</option>
-                            <option value="F+N" {{ old('type_clasi', $groupElectro->type_clasi ?? '') == 'F+N' ? 'selected' : '' }}>F+N (Monofásica)</option>
+                            <option value="humedo" {{ old('type_clasi', $groupElectro->type_clasi ?? '') == 'humedo' ? 'selected' : '' }}>Tipo Húmedo</option>
+                            <option value="ambos" {{ old('type_clasi', $groupElectro->type_clasi ?? '') == 'ambos' ? 'selected' : '' }}>Mojado y Húmedo</option>
+                            <option value="noclasi" {{ old('type_clasi', $groupElectro->type_clasi ?? '') == 'noclasi' ? 'selected' : '' }}>No Clasificado</option>
                         </select>
                         @error('type_clasi') <br>[ERROR]:{{ $message }} @enderror
                     </div>

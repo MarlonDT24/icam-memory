@@ -232,8 +232,8 @@ class FormController extends Controller
         // FOOTER: pie de página alineado a la derecha y en español
         $footer = $section->addFooter();
 
-        setlocale(LC_TIME, 'es_ES.UTF-8', 'Spanish_Spain', 'Spanish');
-        $fechaEspañol = ucfirst(strftime('%d de %B de %Y'));
+        $meses = [1 => 'enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 'julio', 'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre'];
+        $fechaEspañol = date('j') . ' de ' . $meses[(int)date('n')] . ' de ' . date('Y');
         $footer->addText("Valencia, " . $fechaEspañol, ['italic' => true], ['alignment' => \PhpOffice\PhpWord\SimpleType\Jc::RIGHT]);
 
         // Guardamos el archivo
