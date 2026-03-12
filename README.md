@@ -1,6 +1,6 @@
 # ICAM Memory — Plataforma de Gestión de Memorias Técnicas
 
-Sistema web interno para la generación, almacenamiento y descarga de **memorias técnicas** en formato Word, desarrollado para **ICAM SL**. Incluye además un calculador de cumplimiento de normativa de protección contra incendios (PCI) según el reglamento RSCIEI español.
+Sistema web interno para la generación, almacenamiento y descarga de **memorias técnicas** en formato Word y PDF, desarrollado para **ICAM SL**. Incluye además un calculador de cumplimiento de normativa de protección contra incendios (PCI) según el reglamento RSCIEI español.
 
 ---
 
@@ -233,10 +233,6 @@ SESSION_DRIVER=file
 FILESYSTEM_DISK=local
 ```
 
-> El usuario de GeoNames API está actualmente hardcodeado en `GroupElectroController`. Para moverlo a `.env`, añadir `GEONAMES_USERNAME=` y actualizar el controlador.
-
----
-
 ## Despliegue en Plesk
 
 1. Apuntar el Document Root a `public/`
@@ -251,26 +247,6 @@ FILESYSTEM_DISK=local
    ```
 5. Subir manualmente la plantilla Word a `storage/app/private/plantillas/`
 6. Asegurar permisos de escritura en `storage/` y `bootstrap/cache/`
-
----
-
-## Issues conocidos y pendientes
-
-| # | Severidad | Descripción |
-|---|---|---|
-| 1 | **Crítico** | `lowVoltageController::class` en `web.php` usa minúscula — falla en Linux (filesystem case-sensitive) |
-| 2 | **Bug** | Vista `lowVoltage/create.blade.php` hace submit a `form.store` en lugar de `lowVoltage.store` |
-| 3 | **Bug** | Vista `groupElectro/edit.blade.php`: select de `type_clasi` tiene opciones incompletas/incorrectas |
-| 4 | **Bug** | Vista `groupElectro/edit.blade.php`: input de `budget_excel` tiene atributo mal nombrado |
-| 5 | **Deprecación** | `strftime()` en `FormController` está deprecado en PHP 8.1+ y eliminado en PHP 9 |
-| 6 | **Incompleto** | Migración `low_voltages` solo tiene `id` + timestamps; modelo define 15 campos sin columnas |
-| 7 | **Seguridad** | Username de GeoNames hardcodeado en el controlador — debería estar en `.env` |
-| 8 | **Sin auth** | Ruta `/pci` no tiene middleware `auth` — accessible sin login |
-| 9 | **Naming** | Archivo `groupElectro.php` no sigue PSR-4 (debería ser `GroupElectro.php`) |
-| 10 | **Campo huérfano** | Campo `fecha` en fillable de `GroupElectro` no existe en la migración |
-| 11 | **Sin versionar** | Plantilla Word no está en el repositorio — dependencia externa sin gestión |
-| 12 | **Sin usar** | `barryvdh/laravel-dompdf` y TailwindCSS instalados pero sin uso activo |
-| 13 | **Próximamente** | Módulo Baja Tensión deshabilitado en interfaz y sin implementación backend |
 
 ---
 
@@ -294,7 +270,7 @@ php artisan optimize:clear
 
 ## Licencia
 
-Proyecto privado — ICAM SL. Todos los derechos reservados.
+Proyecto — ICAM SL. Todos los derechos reservados.
 
 ---
 
